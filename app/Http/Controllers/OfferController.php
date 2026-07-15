@@ -1,0 +1,73 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Offer;
+use App\Models\Product;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
+
+class OfferController extends Controller
+{
+    public function store(Request $request)
+    {
+        $request->validate(
+            [
+                'product_id' => [
+                    'required',
+                    'integer',
+                    'exists:products,product_id',
+                    
+                    Rule::unique('offers', 'product_id')
+                        ->where(fn ($query) =>
+                            $query->where('buyer_id', Auth::id())
+                        ),
+                ],
+
+                'offer_price' => ['required', 'numeric','min:0.01',],
+                'note' => ['nullable', 'string', 'max:1000',],
+
+            ], 
+            
+            [
+                'product_id.unique' =>
+                    'You have already submitted an offer for this product.',
+
+                'offer_price.min' =>
+                    'The offered price must be greater than zero.',
+
+            ]
+        );
+
+        $product = Product::findOrFail($request->product_id);
+
+      // Block new offers for Reserved or Sold Out products.
+
+        if (strtolower($product->availability_status) !== 'available') {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with(
+                    'error',
+                    'This product is no longer available for offers.'
+                );
+        }
+
+
+        Offer::create([
+            'product_id' => $product->product_id,
+            'buyer_id' => Auth::id(),
+            'offer_price' => $request->offer_price,
+            'quantity' => $product->quantity,
+            'note' => $request->note,
+            'status' => 'pending',
+            'rejected_by' => null,
+            'accepted_by' => null,
+        ]);
+
+        return redirect()
+            ->back()
+            ->with('success','Offer submitted successfully!');
+    }
+}
