@@ -1,4 +1,5 @@
 @props([
+    'productId',
     'offerId',
     'image',
     'product',
@@ -183,13 +184,12 @@
                 </p>
 
                 {{-- Mobile Responsive: Full-width action button on mobile --}}
-                <button
-                    type="button"
-                    class="w-full px-5 py-2.5 mt-4 text-sm sm:text-base font-semibold text-green-700 border border-green-600 rounded-lg hover:bg-green-50 sm:w-auto">
+               <a
+                    href="{{ route('buyer.products.show', ['product' => $productId]) }}"
+                    class="flex-1 px-4 py-2.5 text-sm sm:text-base font-semibold text-green-700 border border-green-600 rounded-lg hover:bg-green-50 whitespace-nowrap sm:flex-none sm:px-5">
 
                     View Details
-
-                </button>
+                </a>
 
             @elseif($statusLower === 'accepted')
 
@@ -224,13 +224,12 @@
                 {{-- Mobile Responsive: Action buttons wrap and share available width --}}
                 <div class="flex gap-3 mt-4">
 
-                    <button
-                        type="button"
+                    <a
+                        href="{{ route('buyer.products.show', ['product' => $productId]) }}"
                         class="flex-1 px-4 py-2.5 text-sm sm:text-base font-semibold text-green-700 border border-green-600 rounded-lg hover:bg-green-50 whitespace-nowrap sm:flex-none sm:px-5">
 
                         View Details
-
-                    </button>
+                    </a>
 
                     <a
                         href="{{ route('buyer.orders') }}"
@@ -329,13 +328,13 @@
                 @endif
 
                 {{-- Mobile Responsive: Full-width action button on mobile --}}
-                <button
-                    type="button"
+                <a
+                    href="{{ route('buyer.products.show', ['product' => $productId]) }}"
                     class="w-full px-5 py-2.5 mt-4 text-sm sm:text-base font-semibold text-green-700 border border-green-600 rounded-lg hover:bg-green-50 sm:w-auto">
 
                     View Details
 
-                </button>
+                </a>
 
             @endif
 

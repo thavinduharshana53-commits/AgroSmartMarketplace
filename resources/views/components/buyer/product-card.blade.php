@@ -174,13 +174,14 @@
         {{-- Product Actions --}}
         <div class="grid grid-cols-2 gap-2 pt-3 mt-auto">
 
-            <button
-                type="button"
-                class="px-2 py-2 text-sm font-bold text-[#1F7A1F] border border-[#1F7A1F] rounded-lg hover:bg-green-50 sm:text-base whitespace-nowrap">
+            <a
+                href="{{ route('buyer.products.show', [
+                    'product' => $productId
+                ]) }}"
+                class="px-2 py-2 text-sm font-bold text-center text-[#1F7A1F] border border-[#1F7A1F] rounded-lg hover:bg-green-50 sm:text-base whitespace-nowrap">
 
                 View Details
-
-            </button>
+            </a>
 
             @if($isAvailable)
 

@@ -82,4 +82,8 @@ class User extends Authenticatable
     public function receivedReviews(){
         return $this->hasMany(Review::class, 'farmer_id', 'id');
     }
+
+    public function demand(){
+        return $this->hasMany(Demand::class, 'buyer_id', 'id');
+    }
 }

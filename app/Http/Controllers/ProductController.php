@@ -27,7 +27,7 @@ class ProductController extends Controller
             'city' => $request->city,
             'product_image' => $imagePath,
             'description' => $request->description,
-            'demand_level' => 'High Demand',
+            'demand_level' => 'Low Demand',
             'availability_status' => 'Available',
         ]);
 

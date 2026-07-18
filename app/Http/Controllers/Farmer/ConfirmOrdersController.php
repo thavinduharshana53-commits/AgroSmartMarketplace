@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Offer;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Demand;
+use App\Services\DemandAnalysisService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -26,7 +28,7 @@ class ConfirmOrdersController extends Controller
         return view('farmer.confirmOrders', compact('orders'));
     }
 
-    public function updateStatus(Request $request, Order $order) {
+    public function updateStatus(Request $request, Order $order, DemandAnalysisService $demandAnalysisService) {
         abort_unless(
             (int) $order->farmer_id === (int) Auth::id(),
             403,
@@ -66,17 +68,8 @@ class ConfirmOrdersController extends Controller
             'cancelled' => [],
         ];
 
-        if (
-            ! in_array(
-                $newStatus,
-                $allowedTransitions[$currentStatus] ?? [],
-                true
-            )
-        ) {
-            return back()->with(
-                'error',
-                'This order status change is not allowed.'
-            );
+        if (! in_array($newStatus,$allowedTransitions[$currentStatus] ?? [],true)) {
+            return back()->with('error', 'This order status change is not allowed.');
         }
 
         DB::transaction(function () use (
@@ -96,6 +89,21 @@ class ConfirmOrdersController extends Controller
                 )->update([
                     'availability_status' => 'Sold Out',
                 ]);
+
+                // Record the completed order for demand analysis.
+                Demand::firstOrCreate([
+                        'buyer_id' => $order->buyer_id,
+                        'product_id' => $order->product_id,
+                        'activity_type' => 'order',
+                    ],
+
+                    [
+                        'activity_date' => now(),
+                ]);
+            }
+
+            if ($demandActivity->wasRecentlyCreated) {
+                $demandAnalysisService->analyzeProduct($order->product);
             }
 
             // Cancelled order makes the product available again.

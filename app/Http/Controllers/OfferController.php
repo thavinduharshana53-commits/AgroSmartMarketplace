@@ -4,13 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Offer;
 use App\Models\Product;
+use App\Models\Demand;
+use App\Services\DemandAnalysisService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class OfferController extends Controller
 {
-    public function store(Request $request)
+    public function store(Request $request, DemandAnalysisService $demandAnalysisService)
     {
         $request->validate(
             [
@@ -65,6 +67,21 @@ class OfferController extends Controller
             'rejected_by' => null,
             'accepted_by' => null,
         ]);
+
+        // Record the Buyer offer activity for demand analysis.
+        Demand::firstOrCreate([
+            'buyer_id' => Auth::id(),
+            'product_id' => $product->product_id,
+            'activity_type' => 'offer',
+        ],
+
+        [
+            'activity_date' => now(),
+        ]);
+
+        if ($demandActivity->wasRecentlyCreated) {
+            $demandAnalysisService->analyzeProduct($product);
+        }
 
         return redirect()
             ->back()

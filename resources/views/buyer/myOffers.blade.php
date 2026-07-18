@@ -27,6 +27,7 @@
 
             <x-buyer.my-offer-card
                 :offerId="$offer->offer_id"
+                :product-id="$offer->product->product_id"
                 :image="$offer->product->product_image
                     ? 'storage/'.$offer->product->product_image
                     : 'image/product-placeholder.png'"

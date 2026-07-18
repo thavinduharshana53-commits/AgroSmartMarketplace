@@ -118,7 +118,7 @@
                 </a>
 
                 <a href="{{ route('farmer.confirmOrders') }}"
-                    class="flex items-center gap-3 px-4 py-4 text-base font-semibold rounded-lg
+                    class="flex items-center gap-3 px-4 py-3 text-base font-semibold rounded-lg
                     {{ request()->routeIs('farmer.confirmOrders') ? 'text-[#1F7A1F] bg-white' : 'text-white hover:bg-green-50 hover:text-[#1F7A1F]' }}">
 
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -140,8 +140,9 @@
 
                 </a>
 
-                <a href="#"
-                    class="flex items-center gap-3 px-4 py-3 text-base font-semibold text-white rounded-lg hover:bg-green-50 hover:text-[#1F7A1F]">
+                <a href="{{ route('farmer.demandAnalysis') }}"
+                    class="flex items-center gap-3 px-4 py-3 text-base font-semibold rounded-lg
+                    {{ request()->routeIs('farmer.demandAnalysis') ? 'text-[#1F7A1F] bg-white' : 'text-white hover:bg-green-50 hover:text-[#1F7A1F]'}}">
 
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
 

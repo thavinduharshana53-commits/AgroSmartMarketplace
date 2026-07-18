@@ -11,9 +11,11 @@ use App\Http\Controllers\Farmer\PublishProductController;
 use App\Http\Controllers\Farmer\ManageOffersController;
 use App\Http\Controllers\Farmer\ConfirmOrdersController;
 use App\Http\Controllers\Farmer\MyProductsController;
+use App\Http\Controllers\Farmer\DemandAnalysisController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\CounterOfferController;
+
 
 
 Route::get('/', function () {
@@ -33,7 +35,7 @@ Route::middleware([
     if (Auth::user()->role === 'farmer'){
         return redirect()->route('farmer.dashboard');
     }
-     
+
     return redirect()->route('login');
 });
 
@@ -41,9 +43,13 @@ Route::middleware(['auth'])->group(function(){
 
     Route::get('/buyer/dashboard', [BuyerDashboardController::class, 'index'])
        ->name('buyer.dashboard');
-    
+
     Route::get('/buyer/browseProducts', [browseProductsController::class, 'index'])
         ->name('buyer.browseProducts');
+
+    Route::get('/buyer/products/{product}', [browseProductsController::class, 'show'])
+        ->name('buyer.products.show');
+
 
     Route::get('/buyer/myOffers', [MyOffersController::class, 'index'])
         ->name('buyer.myOffers');
@@ -53,17 +59,17 @@ Route::middleware(['auth'])->group(function(){
 
     Route::post('/buyer/offers/store', [OfferController::class, 'store'])
         ->name('buyer.offers.store');
-    
+
     Route::post('/buyer/orders/{order}/review', [ReviewFeedbackController::class, 'store'])
         ->name('buyer.orders.review');
 
     Route::PATCH('/buyer/counter/{offer}/reject', [MyOffersController::class, 'counterReject'])
         ->name('buyer.counter.reject');
-    
+
     Route::PATCH('/buyer/counter/{offer}/accept', [MyOffersController::class, 'counterAccept'])
         ->name('buyer.counter.accept');
-      
-  
+
+
 
     Route::get('/farmer/dashboard', [FarmerDashboardController::class, 'index'])
         ->name('farmer.dashboard');
@@ -73,7 +79,7 @@ Route::middleware(['auth'])->group(function(){
 
     Route::get('/farmer/manageOffers', [ManageOffersController::class, 'index'])
         ->name('farmer.manageOffers');
-    
+
     Route::get('/farmer/confirmOrders', [ConfirmOrdersController::class, 'index'])
         ->name('farmer.confirmOrders');
 
@@ -83,14 +89,15 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/farmer/products/{product}/editProducts', [MyProductsController::class, 'edit'])
         ->name('farmer.products.editProducts');
 
-    
+    Route::get('/farmer/demandAnalysis', [DemandAnalysisController::class, 'index'])
+        ->name('farmer.demandAnalysis');
 
     Route::PATCH('/farmer/offers/{offer}/accept', [ManageOffersController::class, 'accept'])
         ->name('farmer.offers.accept');
 
     Route::PATCH('/farmer/offers/{offer}/reject', [ManageOffersController::class, 'reject'])
         ->name('farmer.offers.reject');
-    
+
     Route::PATCH('/farmer/offers/{offer}/counter', [CounterOfferController::class, 'counter'])
         ->name('farmer.offers.counter');
 
@@ -99,12 +106,12 @@ Route::middleware(['auth'])->group(function(){
 
     Route::PATCH('/farmer/products/{product}/update', [MyProductsController::class, 'update'])
         ->name('farmer.products.update');
-    
+
     Route::post('/farmer/products/store', [ProductController::class, 'store'])
         ->name('farmer.products.store');
-    
-   
 
-   
+
+
+
 
 });

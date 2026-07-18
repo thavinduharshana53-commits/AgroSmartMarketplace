@@ -215,36 +215,64 @@
 
                 </button>
 
-                @if(request()->routeIs('buyer.browseProducts'))
+            @if(request()->routeIs('buyer.browseProducts'))
+            {{-- Mobile Responsive: Search is hidden on small screens --}}
+            <form action="{{ route('buyer.browseProducts') }}" method="GET" class="relative w-80">
 
-                    {{-- Mobile Responsive: Search is hidden on small screens --}}
-                    <form action="{{ route('buyer.browseProducts') }}" method="GET" class="relative flex-1 hidden md:block max-w-[380px]">
+                <input type="text" name="search" value="{{ request('search') }}"
+                    placeholder="Search products, crops or farmers..."
+                    class="w-full h-12 pl-5 pr-12 text-base bg-[#F9FAFB] border border-gray-200 rounded-lg focus:border-[#1F7A1F] focus:ring-[#1F7A1F]">
 
-                        <input
-                            type="text"
-                            name="search"
-                            value="{{ request('search') }}"
-                            placeholder="Search products, crops or farmers..."
-                            class="w-full h-12 pl-5 pr-12 text-base bg-[#F9FAFB] border border-gray-200 rounded-lg focus:border-[#1F7A1F] focus:ring-[#1F7A1F]">
+                @if(request('search'))
 
-                        <button type="submit"
-                            class="absolute inset-y-0 right-0 flex items-center justify-center w-12 text-gray-700">
+                    {{-- Clear Search --}}
+                    <a href="{{ route('buyer.browseProducts') }}" title="Clear search"
+                        aria-label="Clear search"
+                        class="absolute inset-y-0 right-0 flex items-center justify-center w-12 text-gray-500 hover:text-red-600">
 
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <svg
+                            class="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                            viewBox="0 0 24 24">
 
-                                <circle cx="11" cy="11" r="7"/>
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            d="M6 6l12 12M18 6 6 18"/>
 
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M20 20l-3.5-3.5"/>
-                            </svg>
+                        </svg>
+                    </a>
+                @else
 
-                        </button>
+                    {{-- Submit Search --}}
+                    <button type="submit" title="Search" aria-label="Search"
+                        class="absolute inset-y-0 right-0 flex items-center justify-center w-12 text-gray-700 hover:text-green-700">
 
-                    </form>
+                        <svg
+                            class="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            viewBox="0 0 24 24">
+
+                            <circle cx="11" cy="11" r="7"/>
+
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M20 20l-3.5-3.5"/>
+
+                        </svg>
+
+                    </button>
 
                 @endif
+
+            </form>
+
+            @endif
 
                 <!-- Mobile Responsive: Uses smaller gaps on mobile -->
                 <div class="flex items-center gap-1 sm:gap-3 lg:gap-4">
