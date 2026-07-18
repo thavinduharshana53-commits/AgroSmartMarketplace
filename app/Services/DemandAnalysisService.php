@@ -35,21 +35,13 @@ class DemandAnalysisService
                 'activity_type'
             );
 
-        $searchCount = (int) (
-            $activityCounts['search'] ?? 0
-        );
+        $searchCount = (int) ($activityCounts['search'] ?? 0);
 
-        $viewCount = (int) (
-            $activityCounts['view'] ?? 0
-        );
+        $viewCount = (int) ($activityCounts['view'] ?? 0);
 
-        $offerCount = (int) (
-            $activityCounts['offer'] ?? 0
-        );
+        $offerCount = (int) ($activityCounts['offer'] ?? 0);
 
-        $orderCount = (int) (
-            $activityCounts['order'] ?? 0
-        );
+        $orderCount = (int) ($activityCounts['order'] ?? 0);
 
         $demandScore =
             ($searchCount * self::SEARCH_POINTS) +

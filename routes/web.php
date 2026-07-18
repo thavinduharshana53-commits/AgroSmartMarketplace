@@ -110,8 +110,7 @@ Route::middleware(['auth'])->group(function(){
     Route::post('/farmer/products/store', [ProductController::class, 'store'])
         ->name('farmer.products.store');
 
-
-
-
+    Route::post('/farmer/smart-pricing/suggest',[ProductController::class, 'suggestPrice'])
+        ->name('farmer.smart-pricing.suggest');
 
 });
