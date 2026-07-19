@@ -16,7 +16,7 @@
             Browse Products
         </h1>
 
-        <p class="mt-1 text-sm text-gray-500 sm:text-base">
+        <p class="mt-1 mb-5 text-sm text-gray-500 sm:text-base">
             Find fresh agricultural products from trusted farmers.
         </p>
     </div>
