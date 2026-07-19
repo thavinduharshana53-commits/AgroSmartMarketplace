@@ -50,7 +50,7 @@
                     </h1>
 
                     <p class="mt-1 text-sm text-white leading-none">
-                        Administration 
+                        Administration
                     </p>
                 </div>
             </div>
@@ -141,10 +141,12 @@
 
             {{-- Product Management --}}
             <a
-                href="#"
+                href="{{ route('admin.productManage') }}"
                 class="flex items-center gap-3 px-4 py-3.5
                        font-semibold transition rounded-xl
-                       text-slate-300 hover:bg-slate-800 hover:text-white">
+                    {{ request()->routeIs('admin.productManage') ?
+                    'bg-emerald-500 text-white shadow-lg shadow-emerald-950/30' :
+                    ' text-slate-300 hover:bg-slate-800 hover:text-white'}}">
 
                 <svg
                     class="w-5 h-5 shrink-0"

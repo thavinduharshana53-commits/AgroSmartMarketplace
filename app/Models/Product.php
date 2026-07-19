@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 
 class Product extends Model
 {
@@ -20,12 +22,20 @@ class Product extends Model
         'product_image',
         'description',
         'demand_level',
-        'availability_status'
+        'availability_status',
+        'moderation_status',
+        'removal_reason',
+        'removed_by',
+        'removed_at',
+    ];
+
+    protected $casts = [
+        'removed_at' => 'datetime',
     ];
 
     public function farmer()
     {
-        return $this->belongsTo(User::class, 'farmer_id');
+        return $this->belongsTo(User::class, 'farmer_id', 'id');
     }
 
     public function offers(){
@@ -38,5 +48,9 @@ class Product extends Model
 
     public function demand(){
         return $this->hasMany(Demand::class, 'product_id', 'product_id');
+    }
+
+    public function removedBy(){
+        return $this->belongsTo(User::class, 'removed_by', 'id');
     }
 }

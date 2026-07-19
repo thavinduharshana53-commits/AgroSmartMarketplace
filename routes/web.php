@@ -14,6 +14,7 @@ use App\Http\Controllers\Farmer\MyProductsController;
 use App\Http\Controllers\Farmer\DemandAnalysisController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\UserManageController;
+use App\Http\Controllers\Admin\ProductManageController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\CounterOfferController;
@@ -131,8 +132,18 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
         Route::get('/userManage', [UserManageController::class, 'index'] )
             ->name('userManage');
-        
+
         Route::PATCH('/userManage/{user}/status', [UserManageController::class, 'updateStatus'] )
             ->name('userManage.status');
+
+        Route::get('/productManage', [ProductManageController::class, 'index'] )
+            ->name('productManage');
+
+        Route::patch('/productManage/{product}/remove',[ProductManageController::class, 'remove'])
+            ->name('productManage.remove');
+
+        Route::patch('/products/{product}/restore',[ProductManageController::class, 'restore'])
+            ->name('productManage.restore');
+
 
     });

@@ -42,6 +42,7 @@ class DashboardController extends Controller
          * 2. Same district
          */
         $products = Product::with('farmer')
+            ->where('moderation_status', 'active')
             ->whereRaw(
                 'LOWER(TRIM(availability_status)) = ?',
                 ['available']

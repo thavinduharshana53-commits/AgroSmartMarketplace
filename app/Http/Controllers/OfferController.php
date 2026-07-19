@@ -16,10 +16,7 @@ class OfferController extends Controller
     {
         $request->validate(
             [
-                'product_id' => [
-                    'required',
-                    'integer',
-                    'exists:products,product_id',
+                'product_id' => [ 'required', 'integer', 'exists:products,product_id',
 
                     Rule::unique('offers', 'product_id')
                         ->where(fn ($query) =>
@@ -43,6 +40,10 @@ class OfferController extends Controller
         );
 
         $product = Product::findOrFail($request->product_id);
+
+        if ($product->moderation_status !== 'active') {
+            return back()->with('error','This product listing has been removed and is no longer available.');
+        }
 
       // Block new offers for Reserved or Sold Out products.
 

@@ -11,28 +11,14 @@ use Illuminate\Support\Facades\Auth;
 
 class browseProductsController extends Controller
 {
-    public function index(
-        Request $request,
-        DemandAnalysisService $demandAnalysisService
-    ) {
+    public function index(Request $request,DemandAnalysisService $demandAnalysisService)
+     {
         $validated = $request->validate([
-            'search' => [
-                'nullable',
-                'string',
-                'max:100',
-            ],
+            'search' => ['nullable', 'string','max:100',],
 
-            'district' => [
-                'nullable',
-                'string',
-                'max:100',
-            ],
+            'district' => ['nullable','string','max:100',],
 
-            'city' => [
-                'nullable',
-                'string',
-                'max:100',
-            ],
+            'city' => ['nullable','string','max:100',],
         ]);
 
         $search = trim(
@@ -82,11 +68,8 @@ class browseProductsController extends Controller
             ->pluck('city');
 
         $products = Product::with('farmer')
-
-            /*
-             * Search by product, category, location
-             * or Farmer name.
-             */
+            ->where('moderation_status', 'active')
+            /* Search by product, category, locatio or Farmer name.*/
             ->when(
                 $search !== '',
                 function ($query) use ($search) {
@@ -242,10 +225,12 @@ class browseProductsController extends Controller
         );
     }
 
-    public function show(
-        Product $product,
-        DemandAnalysisService $demandAnalysisService
-    ) {
+    public function show(Product $product, DemandAnalysisService $demandAnalysisService)
+    {
+        abort_if( $product->moderation_status !== 'active',404,
+            'This product listing is unavailable.'
+        );
+
         $product->load('farmer');
 
         $alreadyViewedToday = Demand::where(
