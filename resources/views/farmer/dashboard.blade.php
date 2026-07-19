@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="min-h-screen p-2 bg-white">
+<div class="min-h-screen p-2">
 
     <div>
         <h1 class="text-3xl font-bold text-gray-900">
@@ -20,7 +20,6 @@
         <x-farmer.stat-card
             title="Total Products"
             :value="$totalProducts"
-            bg="bg-white"
             iconBg="bg-[#DDF5D8]">
 
             <x-slot name="icon">
@@ -45,7 +44,6 @@
         <x-farmer.stat-card
             title="Pending Offers"
             :value="$pendingOffers"
-            bg="bg-white"
             iconBg="bg-[#FEEDC8]">
 
             <x-slot name="icon">
@@ -70,7 +68,6 @@
         <x-farmer.stat-card
             title="Completed Orders"
             :value="$completedOrders"
-            bg="bg-white"
             iconBg="bg-[#E0EBFD]">
 
             <x-slot name="icon">
@@ -105,7 +102,6 @@
         <x-farmer.stat-card
             title="Farmer Rating"
             :value="number_format((float) $averageRating, 1).' / 5'"
-            bg="bg-white"
             iconBg="bg-[#FEF3C7]">
 
             <x-slot name="icon">
@@ -127,7 +123,7 @@
 
         <a
             href="{{ route('farmer.publishProducts') }}"
-            class="p-8 transition bg-[#F8F5EC] shadow-sm rounded-2xl hover:shadow-md">
+            class="p-8 transition bg-white shadow-sm rounded-2xl hover:shadow-md">
 
             <h2 class="mt-5 text-2xl font-bold text-green-700">
                 Publish Product
@@ -141,7 +137,7 @@
 
         <a
             href="{{ route('farmer.manageOffers') }}"
-            class="p-8 transition bg-[#F8F5EC] shadow-sm rounded-2xl hover:shadow-md">
+            class="p-8 transition bg-white shadow-sm rounded-2xl hover:shadow-md">
 
             <h2 class="mt-5 text-2xl font-bold text-green-700">
                 Manage Offers
@@ -156,7 +152,7 @@
     </div>
 
     {{-- Recent Buyer Reviews --}}
-    <section class="mt-10">
+    <section class="mt-10 ">
 
             <div>
                 <h2 class="text-2xl font-bold text-gray-900">
@@ -176,7 +172,7 @@
 
                     <article class="p-6 transition bg-white border border-gray-200 shadow-sm rounded-2xl hover:shadow-md">
 
-                        <div class="flex items-start justify-between gap-4">
+                        <div class="flex items-start  justify-between gap-4">
 
                             <div class="flex items-center gap-3 min-w-0">
 

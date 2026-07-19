@@ -15,7 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
-<body class="m-0 overflow-hidden bg-white text-[#111827]">
+<body class="m-0 overflow-hidden text-[#111827]">
 
     <!-- Mobile Responsive: Controls the mobile sidebar -->
     <div
@@ -342,7 +342,7 @@
                             x-transition
                             class="absolute right-0 z-50 mt-3 overflow-hidden bg-white border border-gray-200 shadow-lg w-52 rounded-xl">
 
-                            <a href="#"
+                            <!-- <a href="#"
                                 class="flex items-center gap-3 px-4 py-3 text-base font-medium text-gray-700 hover:bg-gray-50">
 
                                 <svg
@@ -359,7 +359,7 @@
 
                                 Profile
 
-                            </a>
+                            </a> -->
 
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
@@ -405,7 +405,7 @@
             </header>
 
             <!-- Mobile Responsive: Uses smaller content padding on mobile  -->
-            <div class="h-[calc(100vh-80px)] bg-white overflow-y-auto px-3 py-3 sm:px-5 lg:px-8">
+            <div class="h-[calc(100vh-80px)] bg-[#F8FAFC] overflow-y-auto px-3 py-3 sm:px-5 lg:px-8">
                 @yield('content')
             </div>
 

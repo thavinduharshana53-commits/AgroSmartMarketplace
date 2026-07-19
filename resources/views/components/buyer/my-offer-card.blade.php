@@ -309,7 +309,7 @@
 
                 @elseif($rejectedBy === 'system')
 
-                    <p class="mt-3 text-sm text-gray-500 sm:text-base">
+                    <p class="mt-3 mb-2 text-sm text-gray-500 sm:text-base">
                         Another offer was accepted for this product
                     </p>
 

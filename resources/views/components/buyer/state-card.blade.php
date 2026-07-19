@@ -1,7 +1,7 @@
 @props([
     'title',
     'value' => 0,
-    'bg' => 'bg-white',
+    'bg' => 'bg-[#F8FAFC]',
     'iconBg' => 'bg-green-100',
     'iconColor' => 'text-green-700',
     'link' => '#',
@@ -11,18 +11,13 @@
 <div
     {{ $attributes->merge([
         'class' =>
-            "relative flex items-center w-full min-h-32 gap-4 p-4
-            overflow-hidden transition duration-300 border border-transparent
+            "relative flex items-center border border-slate-200 w-full min-h-32 gap-4 p-4 
+            overflow-hidden transition duration-300
             shadow-sm sm:min-h-36 sm:gap-5 sm:p-5 lg:p-6
             rounded-xl sm:rounded-2xl
             hover:-translate-y-1 hover:shadow-md {$bg}"
     ]) }}>
 
-    {{-- Decorative Circle --}}
-    <div
-        class="absolute w-20 h-20 rounded-full pointer-events-none
-               sm:w-24 sm:h-24 -right-7 -top-7 bg-white/40">
-    </div>
 
     {{-- Icon --}}
     <div

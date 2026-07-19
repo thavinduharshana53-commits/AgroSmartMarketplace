@@ -7,7 +7,7 @@
         @js(route('farmer.smart-pricing.suggest')),
         @js(csrf_token())
     )"
-    class="min-h-screen bg-[#F8F5EC]">
+    class="min-h-screen ">
     <main class="p-8">
 
         <div class="mb-6">

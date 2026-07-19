@@ -1,5 +1,5 @@
 <?php
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Buyer\DashboardController as BuyerDashboardController;
 use App\Http\Controllers\Buyer\browseProductsController;
@@ -12,6 +12,8 @@ use App\Http\Controllers\Farmer\ManageOffersController;
 use App\Http\Controllers\Farmer\ConfirmOrdersController;
 use App\Http\Controllers\Farmer\MyProductsController;
 use App\Http\Controllers\Farmer\DemandAnalysisController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\UserManageController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\CounterOfferController;
@@ -26,20 +28,24 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
-])->get('/dashboard', function(){
+    'account.active',
+])->get('/dashboard', function () {
 
-    if (auth()->user()->role === 'buyer') {
-        return redirect()->route('buyer.dashboard');
-    }
+    $user = Auth::user();
 
-    if (Auth::user()->role === 'farmer'){
-        return redirect()->route('farmer.dashboard');
-    }
+    return match ($user->role) {
+        'buyer' => redirect()->route('buyer.dashboard'),
 
-    return redirect()->route('login');
-});
+        'farmer' => redirect()->route('farmer.dashboard'),
 
-Route::middleware(['auth'])->group(function(){
+        'admin' => redirect()->route('admin.dashboard'),
+
+        default => redirect()->route('login'),
+    };
+
+})->name('dashboard');
+
+Route::middleware(['auth','verified','account.active',])->group(function(){
 
     Route::get('/buyer/dashboard', [BuyerDashboardController::class, 'index'])
        ->name('buyer.dashboard');
@@ -114,3 +120,19 @@ Route::middleware(['auth'])->group(function(){
         ->name('farmer.smart-pricing.suggest');
 
 });
+
+Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified', 'admin', 'account.active',])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'] )
+            ->name('dashboard');
+
+        Route::get('/userManage', [UserManageController::class, 'index'] )
+            ->name('userManage');
+        
+        Route::PATCH('/userManage/{user}/status', [UserManageController::class, 'updateStatus'] )
+            ->name('userManage.status');
+
+    });

@@ -24,7 +24,7 @@
         :value="$nearbyProductsCount"
         :link="route('buyer.browseProducts', ['district' => $buyer->district])"
         linkText="Browse nearby products"
-        bg="bg-[#F4FAF1]"
+        bg="bg-[#F8FAFC]"
         iconBg="bg-[#DDF5D8]">
 
             <x-slot name="icon">
@@ -41,7 +41,7 @@
         :value="$activeOffers"
         :link="route('buyer.myOffers')"
         link-text="View active offers"
-        bg="bg-[#FFF7E8]"
+         bg="bg-[#F8FAFC]"
         iconBg="bg-[#FEEDC8]">
             <x-slot name="icon">
                 <svg class="w-6 h-6 text-[#FE8802]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
@@ -56,7 +56,7 @@
             :value="$activeOrders"
             :link="route('buyer.orders')"
             link-text="Track active orders"
-            bg="bg-[#EEF5FF]"
+            bg="bg-[#F8FAFC]"
             iconBg="bg-[#E0EBFD]">
             <x-slot name="icon">
                 <svg class="w-6 h-6 text-[#0839FD]" fill="none" stroke="currentColor" stroke-width="2.5"
@@ -75,7 +75,7 @@
             :value="$completedOrders"
             :link="route('buyer.orders')"
             link-text="View completed orders"
-            bg="bg-[#F7F0FF]"
+            bg="bg-[#F8FAFC]"
             iconBg="bg-[#EADDFC]">
             <x-slot name="icon">
                 <svg class="w-6 h-6 text-[#760AD8]" fill="none" stroke="currentColor" stroke-width="2.5"

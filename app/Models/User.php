@@ -34,7 +34,8 @@ class User extends Authenticatable
         'role',
         'district',
         'city',
-        'contact_number'
+        'contact_number',
+        'account_status',
     ];
 
     /**
