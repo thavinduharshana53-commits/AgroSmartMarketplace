@@ -18,7 +18,7 @@
 
     <!-- stat-card -->
 
-    <div class="flex gap-4">
+    <div class="grid grid-cols-1 gap-4 mt-6 sm:grid-cols-2 sm:gap-5 xl:grid-cols-4">
         <x-buyer.state-card
         title="Nearby Products"
         :value="$nearbyProductsCount"
