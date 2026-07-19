@@ -20,9 +20,10 @@
 
     <div class="flex gap-4">
         <x-buyer.state-card
-        title="Current Offers"
-        value="0"
-        linkText="View all offers"
+        title="Nearby Products"
+        :value="$nearbyProductsCount"
+        :link="route('buyer.browseProducts', ['district' => $buyer->district])"
+        linkText="Browse nearby products"
         bg="bg-[#F4FAF1]"
         iconBg="bg-[#DDF5D8]">
 
@@ -36,9 +37,10 @@
         </x-buyer.state-card>
 
         <x-buyer.state-card
-        title="Pending Offers"
-        value="0"
-        linkText="View all offers"
+        title="Active Offers"
+        :value="$activeOffers"
+        :link="route('buyer.myOffers')"
+        link-text="View active offers"
         bg="bg-[#FFF7E8]"
         iconBg="bg-[#FEEDC8]">
             <x-slot name="icon">
@@ -50,9 +52,10 @@
         </x-buyer.state-card>
 
         <x-buyer.state-card
-            title="Confirmed Orders"
-            value="0"
-            linkText="View all Orders"
+            title="Active Orders"
+            :value="$activeOrders"
+            :link="route('buyer.orders')"
+            link-text="Track active orders"
             bg="bg-[#EEF5FF]"
             iconBg="bg-[#E0EBFD]">
             <x-slot name="icon">
@@ -69,8 +72,9 @@
 
         <x-buyer.state-card
             title="Completed Orders"
-            value="0"
-            linkText="View all Orders"
+            :value="$completedOrders"
+            :link="route('buyer.orders')"
+            link-text="View completed orders"
             bg="bg-[#F7F0FF]"
             iconBg="bg-[#EADDFC]">
             <x-slot name="icon">
@@ -84,107 +88,86 @@
         </x-buyer.state-card>
     </div>
 
+    {{-- Recommended Nearby Products --}}
     <section class="p-6 mt-6 bg-white border border-gray-200 shadow-sm rounded-2xl">
 
-        <div class="flex items-center justify-between mb-5">
-            <h2 class="text-2xl font-bold text-gray-900">
-                Demand Insights
-            </h2>
+        <div class="flex flex-col gap-3 mb-6 sm:flex-row sm:items-center sm:justify-between">
 
-            <a href="#" class="text-base font-semibold text-[#1F7A1F]">
-                View full report →
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900">
+                    Recommended Nearby Products
+                </h2>
+
+                <p class="mt-1 text-base text-gray-500">
+                    Available products near {{ $buyer->city }}, {{ $buyer->district }}.
+                </p>
+            </div>
+
+            <a
+                href="{{ route('buyer.browseProducts') }}"
+                class="font-semibold text-[#1F7A1F] hover:text-green-800 whitespace-nowrap">
+
+                View all products →
+
             </a>
-        </div>
-
-        <div class="grid grid-cols-1 gap-10 md:grid-cols-2">
-
-            <!-- High Demand Chart -->
-            <x-buyer.demand-chart
-                title="High Demand Products"
-                titleColor="text-[#1F7A1F]"
-                lineColor="#15803D"
-                areaColor="#BBF7D0"
-                linePath="M5 95 L35 60 L55 35 L80 95 L105 70 L130 45 L155 65 L180 35 L205 50 L230 40 L255 15 L270 45 L290 45 L300 95"
-                areaPath="M5 95 L35 60 L55 35 L80 95 L105 70 L130 45 L155 65 L180 35 L205 50 L230 40 L255 15 L270 45 L290 45 L300 95 L300 120 L5 120 Z">
-                <x-slot name="points">
-                    <circle cx="5" cy="95" r="3" fill="#15803D" />
-                    <circle cx="35" cy="60" r="3" fill="#15803D" />
-                    <circle cx="55" cy="35" r="3" fill="#15803D" />
-                    <circle cx="80" cy="95" r="3" fill="#15803D" />
-                    <circle cx="105" cy="70" r="3" fill="#15803D" />
-                    <circle cx="130" cy="45" r="3" fill="#15803D" />
-                    <circle cx="155" cy="65" r="3" fill="#15803D" />
-                    <circle cx="180" cy="35" r="3" fill="#15803D" />
-                    <circle cx="205" cy="50" r="3" fill="#15803D" />
-                    <circle cx="230" cy="40" r="3" fill="#15803D" />
-                    <circle cx="255" cy="15" r="3" fill="#15803D" />
-                    <circle cx="270" cy="45" r="3" fill="#15803D" />
-                    <circle cx="290" cy="45" r="3" fill="#15803D" />
-                    <circle cx="300" cy="95" r="3" fill="#15803D" />
-                </x-slot>
-            </x-buyer.demand-chart>
-
-            <!-- Low Demand Chart -->
-            <x-buyer.demand-chart
-                title="Low Demand Products"
-                titleColor="text-red-500"
-                lineColor="#EF4444"
-                areaColor="#FECACA"
-                linePath="M5 80 L25 65 L45 85 L65 60 L85 35 L105 70 L125 55 L145 65 L165 60 L185 85 L205 95 L225 65 L245 35 L265 60 L285 75 L300 90"
-                areaPath="M5 80 L25 65 L45 85 L65 60 L85 35 L105 70 L125 55 L145 65 L165 60 L185 85 L205 95 L225 65 L245 35 L265 60 L285 75 L300 90 L300 120 L5 120 Z">
-                <x-slot name="points">
-                    <circle cx="5" cy="80" r="3" fill="#EF4444" />
-                    <circle cx="25" cy="65" r="3" fill="#EF4444" />
-                    <circle cx="45" cy="85" r="3" fill="#EF4444" />
-                    <circle cx="65" cy="60" r="3" fill="#EF4444" />
-                    <circle cx="85" cy="35" r="3" fill="#EF4444" />
-                    <circle cx="105" cy="70" r="3" fill="#EF4444" />
-                    <circle cx="125" cy="55" r="3" fill="#EF4444" />
-                    <circle cx="145" cy="65" r="3" fill="#EF4444" />
-                    <circle cx="165" cy="60" r="3" fill="#EF4444" />
-                    <circle cx="185" cy="85" r="3" fill="#EF4444" />
-                    <circle cx="205" cy="95" r="3" fill="#EF4444" />
-                    <circle cx="225" cy="65" r="3" fill="#EF4444" />
-                    <circle cx="245" cy="35" r="3" fill="#EF4444" />
-                    <circle cx="265" cy="60" r="3" fill="#EF4444" />
-                    <circle cx="285" cy="75" r="3" fill="#EF4444" />
-                    <circle cx="300" cy="90" r="3" fill="#EF4444" />
-                </x-slot>
-            </x-buyer.demand-chart>
 
         </div>
+
+        @forelse($products as $product)
+
+            @if($loop->first)
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+            @endif
+
+            <x-buyer.product-card
+                :product-id="$product->product_id"
+                :image="$product->product_image
+                    ? 'storage/'.$product->product_image
+                    : 'image/products/default.png'"
+                :badge="$product->demand_level"
+                :name="$product->product_name"
+                :farmer="$product->farmer->name"
+                :location="$product->city.', '.$product->district"
+                :price="$product->price"
+                :minimum-price="$product->minimum_price"
+                :quantity="$product->quantity"
+                :availability-status="$product->availability_status"
+            />
+
+            @if($loop->last)
+                </div>
+            @endif
+
+        @empty
+
+            <div class="flex flex-col items-center justify-center px-6 py-12 text-center border border-dashed border-gray-300 rounded-xl bg-gray-50">
+
+                <div class="flex items-center justify-center w-14 h-14 text-2xl bg-green-100 rounded-full">
+                    📍
+                </div>
+
+                <h3 class="mt-4 text-lg font-bold text-gray-900">
+                    No nearby products available
+                </h3>
+
+                <p class="max-w-md mt-2 text-gray-500">
+                    There are currently no available products in
+                    {{ $buyer->city }} or {{ $buyer->district }}.
+                </p>
+
+                <a
+                    href="{{ route('buyer.browseProducts') }}"
+                    class="inline-flex px-5 py-2.5 mt-5 font-semibold text-white bg-[#1F7A1F] rounded-lg hover:bg-green-800">
+
+                    Browse all products
+
+                </a>
+
+            </div>
+
+        @endforelse
 
     </section>
-
-    <!-- Recommended nearby Products -->
-    <section class="p-6 mt-6 bg-white border border-gray-200 shadow-sm rounded-2xl">
-
-        <div class="flex items-center justify-between mb-5">
-            <h2 class="text-2xl font-bold text-gray-900">
-                Recommended Nearby Products
-            </h2>
-
-            <a href="#" class="text-sm font-semibold text-[#1F7A1F]">
-                View full products →
-            </a>
-        </div>
-     <div class="grid grid-cols-1 gap-6 p-6 mt-6 bg-white border border-gray-200 shadow-sm md:grid-cols-2 xl:grid-cols-4 rounded-2xl">
-            @foreach($products as $product)
-                <x-buyer.product-card
-                        :product-id="$product->product_id"
-                        :image="$product->product_image ? 'storage/' . $product->product_image : 'image/products/default.png'"
-                        :badge="$product->demand_level"
-                        :name="$product->product_name"
-                        :farmer="$product->farmer->name"
-                        :location="$product->city"
-                        :price="$product->price"
-                        :minimum-price="$product->minimum_price"
-                        :quantity="$product->quantity"
-                        :availabilityStatus="$product->availability_status">
-
-                </x-buyer.product-card>
-            @endforeach
-    </section>    
     <x-buyer.submit_offers />
 </div>
 @endsection

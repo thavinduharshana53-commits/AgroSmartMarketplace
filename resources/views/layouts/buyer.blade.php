@@ -131,30 +131,6 @@
                     <span>Orders</span>
                 </a>
 
-                <a href="#"
-                  class="flex items-center gap-3 px-4 py-3 text-base font-semibold text-gray-800 rounded-lg hover:bg-green-50 hover:text-[#1F7A1F]">
-
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M5 19V11"/>
-
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M12 19V5"/>
-
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M19 19V9"/>
-                    </svg>
-
-                    <span>Demand Insights</span>
-                </a>
-
             </nav>
 
             <!-- Bottom Promo -->
@@ -218,6 +194,22 @@
             @if(request()->routeIs('buyer.browseProducts'))
             {{-- Mobile Responsive: Search is hidden on small screens --}}
             <form action="{{ route('buyer.browseProducts') }}" method="GET" class="relative w-80">
+
+
+                {{-- Preserve selected location filters --}}
+                @if(request('district'))
+                    <input
+                        type="hidden"
+                        name="district"
+                        value="{{ request('district') }}">
+                @endif
+
+                @if(request('city'))
+                    <input
+                        type="hidden"
+                        name="city"
+                        value="{{ request('city') }}">
+                @endif
 
                 <input type="text" name="search" value="{{ request('search') }}"
                     placeholder="Search products, crops or farmers..."
@@ -323,7 +315,7 @@
                         </svg>
 
                         <span class="absolute flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-[#1F7A1F] rounded-full -top-1 -right-1">
-                            3
+                            0
                         </span>
 
                     </button>
@@ -354,7 +346,7 @@
                                     {{ Auth::user()->name }}
                                 </p>
 
-                                <p class="text-[14px] font-regular text-gray-400">
+                                <p class="text- base font-regular text-gray-400">
                                     {{ Auth::user()->role }}
                                 </p>
                             </div>
@@ -378,7 +370,7 @@
                             x-transition
                             class="absolute right-0 z-50 mt-3 overflow-hidden bg-white border border-gray-200 shadow-lg w-52 rounded-xl">
 
-                            <a href="#"
+                            <!-- <a href="#"
                                 class="flex items-center gap-3 px-4 py-3 text-base font-medium text-gray-700 hover:bg-gray-50">
 
                                 <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -391,7 +383,7 @@
                                 </svg>
 
                                 Profile
-                            </a>
+                            </a> -->
 
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf

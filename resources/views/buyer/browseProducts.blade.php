@@ -57,6 +57,14 @@
 
     @endif
 
+    <x-buyer.location-filters-card
+        :search="$search"
+        :district="$district"
+        :city="$city"
+        :districts="$districts"
+        :cities="$cities"
+    />
+
     <!-- Products -->
     <div
         {{-- Mobile Responsive: One column on mobile, two on tablet and four on large screens --}}

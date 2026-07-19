@@ -6,7 +6,7 @@
 
     {{-- Page Heading --}}
     <div>
-        <h1 class="text-3xl font-bold text-gray-900">
+        <h1 class="text-3xl font-bold border-black-300 text-gray-900">
             Demand Analysis
         </h1>
 

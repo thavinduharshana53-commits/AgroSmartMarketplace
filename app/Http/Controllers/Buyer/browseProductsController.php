@@ -11,10 +11,24 @@ use Illuminate\Support\Facades\Auth;
 
 class browseProductsController extends Controller
 {
-    public function index(Request $request, DemandAnalysisService $demandAnalysisService)
-    {
-        $request->validate([
+    public function index(
+        Request $request,
+        DemandAnalysisService $demandAnalysisService
+    ) {
+        $validated = $request->validate([
             'search' => [
+                'nullable',
+                'string',
+                'max:100',
+            ],
+
+            'district' => [
+                'nullable',
+                'string',
+                'max:100',
+            ],
+
+            'city' => [
                 'nullable',
                 'string',
                 'max:100',
@@ -22,10 +36,57 @@ class browseProductsController extends Controller
         ]);
 
         $search = trim(
-            (string) $request->query('search', '')
+            (string) ($validated['search'] ?? '')
         );
 
+        $district = trim(
+            (string) ($validated['district'] ?? '')
+        );
+
+        $city = trim(
+            (string) ($validated['city'] ?? '')
+        );
+
+        $buyer = Auth::user();
+
+        /*
+         * Get the districts available in published products.
+         */
+        $districts = Product::query()
+            ->whereNotNull('district')
+            ->where('district', '!=', '')
+            ->select('district')
+            ->distinct()
+            ->orderBy('district')
+            ->pluck('district');
+
+        /*
+         * If a district is selected, return cities belonging
+         * to that district. Otherwise, return every city.
+         */
+        $cities = Product::query()
+            ->whereNotNull('city')
+            ->where('city', '!=', '')
+            ->when(
+                $district !== '',
+                function ($query) use ($district) {
+                    $query->whereRaw(
+                        'LOWER(TRIM(district)) = LOWER(TRIM(?))',
+                        [$district]
+                    );
+                }
+            )
+            ->select('city')
+            ->distinct()
+            ->orderBy('city')
+            ->pluck('city');
+
         $products = Product::with('farmer')
+
+            /*
+             * Search by product, category, location
+             * or Farmer name.
+             */
             ->when(
                 $search !== '',
                 function ($query) use ($search) {
@@ -66,10 +127,69 @@ class browseProductsController extends Controller
                     );
                 }
             )
+
+            /*
+             * District filter.
+             */
+            ->when(
+                $district !== '',
+                function ($query) use ($district) {
+                    $query->whereRaw(
+                        'LOWER(TRIM(district)) = LOWER(TRIM(?))',
+                        [$district]
+                    );
+                }
+            )
+
+            /*
+             * City filter.
+             */
+            ->when(
+                $city !== '',
+                function ($query) use ($city) {
+                    $query->whereRaw(
+                        'LOWER(TRIM(city)) = LOWER(TRIM(?))',
+                        [$city]
+                    );
+                }
+            )
+
+            /*
+             * When no location filter is selected,
+             * prioritize products near the Buyer.
+             */
+            ->when(
+                $district === '' && $city === '',
+                function ($query) use ($buyer) {
+                    $query->orderByRaw(
+                        '
+                        CASE
+                            WHEN LOWER(TRIM(city)) = LOWER(TRIM(?))
+                            THEN 1
+
+                            WHEN LOWER(TRIM(district)) = LOWER(TRIM(?))
+                            THEN 2
+
+                            ELSE 3
+                        END
+                        ',
+                        [
+                            $buyer->city,
+                            $buyer->district,
+                        ]
+                    );
+                }
+            )
             ->latest()
             ->get();
 
-        // Record search activity only when a keyword is entered.
+        /*
+         * Record search activity only when the Buyer
+         * enters a search keyword.
+         *
+         * District and city filtering alone will not be
+         * counted as product demand.
+         */
         if ($search !== '') {
             foreach ($products as $product) {
                 $alreadySearchedToday = Demand::where(
@@ -90,8 +210,6 @@ class browseProductsController extends Controller
                     )
                     ->exists();
 
-                // One search activity per Buyer,
-                // Product and day.
                 if (! $alreadySearchedToday) {
                     Demand::create([
                         'buyer_id' => Auth::id(),
@@ -99,22 +217,53 @@ class browseProductsController extends Controller
                         'activity_type' => 'search',
                         'activity_date' => now(),
                     ]);
+
+                    /*
+                     * Recalculate demand after recording
+                     * the new search activity.
+                     */
+                    $demandAnalysisService->analyzeProduct(
+                        $product
+                    );
                 }
-                  // Recalculate after recording the search.
-                  $demandAnalysisService->analyzeProduct($product);
             }
         }
 
-        return view('buyer.browseProducts', compact('products', 'search'));
+        return view(
+            'buyer.browseProducts',
+            compact(
+                'products',
+                'search',
+                'district',
+                'city',
+                'districts',
+                'cities'
+            )
+        );
     }
 
-    public function show(Product $product, DemandAnalysisService $demandAnalysisService) {
+    public function show(
+        Product $product,
+        DemandAnalysisService $demandAnalysisService
+    ) {
         $product->load('farmer');
 
-        $alreadyViewedToday = Demand::where('buyer_id', Auth::id())
-            ->where('product_id', $product->product_id)
-            ->where('activity_type', 'view')
-            ->whereDate('activity_date', today())
+        $alreadyViewedToday = Demand::where(
+                'buyer_id',
+                Auth::id()
+            )
+            ->where(
+                'product_id',
+                $product->product_id
+            )
+            ->where(
+                'activity_type',
+                'view'
+            )
+            ->whereDate(
+                'activity_date',
+                today()
+            )
             ->exists();
 
         if (! $alreadyViewedToday) {
@@ -124,11 +273,15 @@ class browseProductsController extends Controller
                 'activity_type' => 'view',
                 'activity_date' => now(),
             ]);
+
+            $demandAnalysisService->analyzeProduct(
+                $product
+            );
         }
 
-
-        $demandAnalysisService->analyzeProduct($product);
-
-        return view('buyer.productDetails', compact('product'));
+        return view(
+            'buyer.productDetails',
+            compact('product')
+        );
     }
 }
