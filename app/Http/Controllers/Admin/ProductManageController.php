@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Services\SystemActivityService;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -127,7 +128,7 @@ class ProductManageController extends Controller
         );
     }
 
-    public function remove(Request $request,Product $product) 
+    public function remove(Request $request,Product $product,  SystemActivityService $activityService) 
     {
         $validated = $request->validate([
             'removal_reason' => ['required','string','min:5','max:500',],
@@ -146,6 +147,17 @@ class ProductManageController extends Controller
         $product->removed_at = now();
         $product->save();
 
+        $activityService->log(
+            request: $request,
+            action: 'Product Removed',
+            module: 'Product Management',
+            description:
+                "Removed product '{$product->product_name}' " .
+                "(Product ID: {$product->product_id}). " .
+                "Reason: {$validated['removal_reason']}"
+        );
+
+
         return redirect()
             ->route('admin.productManage')
             ->with(
@@ -154,7 +166,7 @@ class ProductManageController extends Controller
             );
     }
 
-    public function restore(Product $product)
+    public function restore(Request $request,Product $product,  SystemActivityService $activityService)
     {
         if ($product->moderation_status !== 'removed') {
             return back()->with(
@@ -168,6 +180,15 @@ class ProductManageController extends Controller
         $product->removed_by = null;
         $product->removed_at = null;
         $product->save();
+
+        $activityService->log(
+            request: $request,
+            action: 'Product Restored',
+            module: 'Product Management',
+            description:
+                "Restored product '{$product->product_name}' " .
+                "(Product ID: {$product->product_id})."
+        );
 
         return redirect()
             ->route('admin.productManage')

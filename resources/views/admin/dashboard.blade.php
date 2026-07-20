@@ -156,7 +156,7 @@
             </div>
 
             <a
-                href="#"
+                href="{{ route('admin.productManage') }}"
                 class="inline-flex items-center gap-2 mt-5
                        text-base font-bold text-amber-600
                        hover:text-amber-800">

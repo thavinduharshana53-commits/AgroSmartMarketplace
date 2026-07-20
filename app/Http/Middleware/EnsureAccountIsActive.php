@@ -9,10 +9,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class EnsureAccountIsActive
 {
-    public function handle(
-        Request $request,
-        Closure $next
-    ): Response {
+    public function handle( Request $request, Closure $next)
+    : Response {
         $user = $request->user();
 
         if (

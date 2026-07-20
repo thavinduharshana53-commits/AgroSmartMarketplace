@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\SystemActivityService;
 use Illuminate\Http\Request;
 
 class UserManageController extends Controller
@@ -62,22 +63,62 @@ class UserManageController extends Controller
         );
     }
 
-    public function updateStatus(Request $request, User $user)
-    {
-        // Admin accounts cannot be blocked from this page.
+    public function updateStatus(Request $request,User $user, SystemActivityService $activityService) {
+
+        // Admin accounts cannot be modified from this page.
         abort_if(
             $user->role === 'admin',
             403,
             'Administrator accounts cannot be modified.'
         );
 
-        $validated = $request->validate(['account_status' => ['required', 'in:active,blocked',],]);
+        // Prevent the logged-in admin from changing their own account.
+        abort_if(
+            (int) $user->id === (int) $request->user()->id,
+            403,
+            'You cannot change your own account status.'
+        );
 
-        $user->update(['account_status' => $validated['account_status'],]);
+        $validated = $request->validate([
+            'account_status' => ['required','in:active,blocked',],
+        ]);
 
-        $message = $validated['account_status'] === 'blocked'
-            ? "{$user->name}'s account was blocked successfully."
-            : "{$user->name}'s account was activated successfully.";
+        $newStatus = $validated['account_status'];
+        $currentStatus = strtolower($user->account_status);
+
+        // Do not create duplicate activity records.
+        if ($currentStatus === $newStatus) {
+            return back()->with('error',"This account is already {$newStatus}.");
+        }
+
+        $user->update([
+            'account_status' => $newStatus,
+        ]);
+
+        if ($newStatus === 'blocked') {
+            $action = 'User Blocked';
+
+            $description =
+                "Blocked {$user->role} account '{$user->name}' " .
+                "(User ID: {$user->id}, Email: {$user->email}).";
+
+            $message = "{$user->name}'s account was blocked successfully.";
+        } else {
+            $action = 'User Activated';
+
+            $description =
+                "Activated {$user->role} account '{$user->name}' " .
+                "(User ID: {$user->id}, Email: {$user->email}).";
+
+            $message = "{$user->name}'s account was activated successfully.";
+        }
+
+        $activityService->log(
+            request: $request,
+            action: $action,
+            module: 'User Management',
+            description: $description
+        );
 
         return back()->with('success', $message);
     }

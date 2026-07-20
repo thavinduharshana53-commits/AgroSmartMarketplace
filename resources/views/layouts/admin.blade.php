@@ -168,10 +168,12 @@
 
             {{-- System Activities --}}
             <a
-                href="#"
+                href="{{ route('admin.systemActivity') }}"
                 class="flex items-center gap-3 px-4 py-3.5
                        font-semibold transition rounded-xl
-                       text-slate-300 hover:bg-slate-800 hover:text-white">
+                       {{ request()->routeIs('admin.systemActivity') ?
+                        'bg-emerald-500 text-white shadow-lg shadow-emerald-950/30' :
+                        'text-slate-300 hover:bg-slate-800 hover:text-white'}}">
 
                 <svg
                     class="w-5 h-5 shrink-0"
@@ -186,16 +188,17 @@
                         d="M4 19V9M10 19V5M16 19v-7M22 19V3"/>
                 </svg>
 
-                System Activities
+                Admin Activities
             </a>
 
             {{-- Reports --}}
             <a
-                href="#"
+                href="{{ route('admin.reports') }}"
                 class="flex items-center gap-3 px-4 py-3.5
                        font-semibold transition rounded-xl
-                       text-slate-300 hover:bg-slate-800 hover:text-white">
-
+                       {{ request()->routeIs('admin.reports') ?
+                        'bg-emerald-500 text-white shadow-lg shadow-emerald-950/30' :
+                        'text-slate-300 hover:bg-slate-800 hover:text-white'}}">
                 <svg
                     class="w-5 h-5 shrink-0"
                     fill="none"

@@ -15,6 +15,8 @@ use App\Http\Controllers\Farmer\DemandAnalysisController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\UserManageController;
 use App\Http\Controllers\Admin\ProductManageController;
+use App\Http\Controllers\Admin\SystemActivityController;
+use App\Http\Controllers\Admin\ReportsController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\CounterOfferController;
@@ -145,5 +147,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::patch('/products/{product}/restore',[ProductManageController::class, 'restore'])
             ->name('productManage.restore');
 
+        Route::get('/systemActivity', [SystemActivityController::class, 'index'] )
+            ->name('systemActivity');
+
+        Route::get('/reports', [ReportsController::class, 'index'] )
+            ->name('reports');
 
     });

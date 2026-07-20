@@ -17,7 +17,7 @@
             </p>
         </div>
 
-        <div class="inline-flex self-start px-4 py-2 text-sm font-semibold
+        <div class="inline-flex self-start px-4 py-2 text-s font-semibold
                     border border-emerald-200 bg-emerald-50
                     text-emerald-700 rounded-xl">
 
