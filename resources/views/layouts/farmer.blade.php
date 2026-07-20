@@ -25,7 +25,7 @@
         <!-- Mobile Responsive: Sidebar slides in and out on mobile -->
         <aside
             :class="mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'"
-            class="fixed top-0 left-0 z-50 flex flex-col w-[244px] h-screen bg-[#1F7A1F] border-r border-gray-200 transition-transform duration-300 lg:translate-x-0">
+            class="fixed top-0 left-0 z-50 flex flex-col w-[244px] h-screen bg-[#16833D] border-r border-gray-200 transition-transform duration-300 lg:translate-x-0">
 
             <!-- logo -->
             <div class="flex items-center h-[80px] px-5 pt-4 pb-3 border-b border-gray-100">
@@ -291,7 +291,7 @@
                             @click="open = !open"
                             class="flex items-center gap-2 px-1 py-2 rounded-lg sm:gap-3 sm:px-2 hover:bg-gray-100">
 
-                            <div class="flex items-center justify-center w-[42px] h-[42px] text-white bg-[#04912F] rounded-full shrink-0">
+                            <div class="flex items-center justify-center w-[42px] h-[42px] text-white bg-[#16833D] rounded-full shrink-0">
 
                                 <svg
                                     class="w-7 h-7"

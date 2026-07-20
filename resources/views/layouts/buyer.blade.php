@@ -329,7 +329,7 @@
                             @click="open = !open"
                             class="flex items-center gap-2 px-1 py-2 rounded-lg sm:gap-3 sm:px-2 hover:bg-gray-100">
 
-                            <div class="flex items-center justify-center w-[42px] h-[42px] text-white bg-[#04912F] rounded-full shrink-0">
+                            <div class="flex items-center justify-center w-[42px] h-[42px] text-white bg-[#16833D] rounded-full shrink-0">
 
                                 <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
 

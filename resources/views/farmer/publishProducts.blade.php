@@ -201,7 +201,7 @@
 
                     <button
                         type="submit"
-                        class="px-10 font-semibold text-white transition bg-[#1F7A1F] h-14 rounded-2xl hover:bg-green-800">
+                        class="px-10 font-semibold text-white transition bg-[#16833D] h-14 rounded-2xl hover:bg-green-800">
                         Publish Product
                     </button>
 

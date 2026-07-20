@@ -1,727 +1,288 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AgroSmart connects Sri Lankan farmers and buyers through smart pricing, location matching and direct wholesale offers.">
     <title>AgroSmart Marketplace</title>
-
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="bg-[#F8F5EC] text-gray-800">
+<body class="bg-[#FAFAF7] text-slate-900 antialiased">
 
-    <!-- NAVBAR -->
-    {{-- Mobile Responsive: Controls the mobile navigation menu --}}
-    <nav
-        x-data="{ mobileMenuOpen: false }"
-        class="relative z-50 bg-white shadow-sm">
-
-        {{-- Mobile Responsive: Adds horizontal padding on smaller screens --}}
-        <div class="flex items-center justify-between px-4 py-3 mx-auto sm:px-6 sm:py-4 max-w-7xl">
-
-            <div class="flex items-center gap-2 sm:gap-3">
-
-                {{-- Mobile Responsive: Smaller logo on mobile --}}
-                <img
-                    src="/image/logo.png"
-                    alt="AgroSmart Logo"
-                    class="object-contain w-11 h-11 sm:w-14 sm:h-14">
-
+    {{-- Navigation --}}
+    <nav x-data="{ open: false }" class="sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 backdrop-blur">
+        <div class="flex items-center justify-between h-20 px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <a href="#home" class="flex items-center gap-3">
+                <img src="{{ asset('image/logo.png') }}" alt="AgroSmart" class="object-contain w-14 h-14">
                 <div>
-                    {{-- Mobile Responsive: Smaller brand name on mobile --}}
-                    <h1 class="text-xl font-bold text-green-700 sm:text-3xl">
-                        AgroSmart
-                    </h1>
-
-                    <p class="text-[10px] sm:text-sm tracking-widest">
-                        MARKETPLACE
-                    </p>
+                    <p class="text-3xl font-extrabold leading-none text-[#16833D]">AgroSmart</p>
+                    <p class="mt-1 text-[10px] font-semibold tracking-[0.24em] text-slate-600">MARKETPLACE</p>
                 </div>
+            </a>
 
+            <div class="items-center hidden gap-8 text-lg font-semibold lg:flex">
+                <a href="#home" class="transition hover:text-[#16833D]">Home</a>
+                <a href="#workflow" class="transition hover:text-[#16833D]">How It Works</a>
+                <a href="#features" class="transition hover:text-[#16833D]">Smart Features</a>
+                <a href="#roles" class="transition hover:text-[#16833D]">For You</a>
+                <a href="#contact" class="transition hover:text-[#16833D]">Contact</a>
             </div>
 
-            {{-- Mobile Responsive: Desktop navigation is only shown on large screens --}}
-            <div class="items-center hidden gap-8 font-medium lg:flex">
-
-                <a href="#" class="hover:text-green-700">
-                    Home
-                </a>
-
-                <a href="#how-it-works" class="hover:text-green-700">
-                    How It Works
-                </a>
-
-                <a href="#why" class="hover:text-green-700">
-                    About
-                </a>
-
-                <a href="#c" class="hover:text-green-700">
-                    Contact
-                </a>
-
-            </div>
-
-            {{-- Mobile Responsive: Authentication buttons are hidden inside mobile menu --}}
             <div class="items-center hidden gap-3 lg:flex">
-
-                <a
-                    href="/login"
-                    class="px-5 py-2 border border-green-700 rounded-lg hover:bg-green-50">
-
-                    Log In
-
-                </a>
-
-                <a
-                    href="/register"
-                    class="px-5 py-2 text-white bg-green-700 rounded-lg hover:bg-green-800">
-
-                    Create Account
-
-                </a>
-
+                <a href="{{ route('login') }}" class="px-5 py-2.5 text-lg font-semibold text-[#16833D] border border-[#16833D] rounded-xl transition hover:bg-green-50">Log In</a>
+                <a href="{{ route('register') }}" class="px-5 py-2.5 font-semibold text-lg text-white bg-[#16833D] rounded-xl shadow-sm transition hover:bg-[#106B31]">Create Account</a>
             </div>
 
-            {{-- Mobile Responsive: Mobile hamburger button --}}
-            <button
-                type="button"
-                @click="mobileMenuOpen = !mobileMenuOpen"
-                class="flex items-center justify-center w-10 h-10 text-green-800 border border-green-200 rounded-lg lg:hidden">
-
-                <svg
-                    x-show="!mobileMenuOpen"
-                    class="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    viewBox="0 0 24 24">
-
-                    <path stroke-linecap="round" d="M4 6h16"/>
-                    <path stroke-linecap="round" d="M4 12h16"/>
-                    <path stroke-linecap="round" d="M4 18h16"/>
-                </svg>
-
-                <svg
-                    x-cloak
-                    x-show="mobileMenuOpen"
-                    class="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    viewBox="0 0 24 24">
-
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M6 18L18 6M6 6l12 12"/>
-                </svg>
-
+            <button type="button" @click="open = !open" aria-label="Toggle navigation" class="grid w-11 h-11 border rounded-xl place-items-center border-slate-200 lg:hidden">
+                <svg x-show="!open" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                <svg x-cloak x-show="open" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M18 6 6 18"/></svg>
             </button>
-
         </div>
 
-        {{-- Mobile Responsive: Dropdown navigation for mobile --}}
-        <div
-            x-cloak
-            x-show="mobileMenuOpen"
-            x-transition
-            @click.away="mobileMenuOpen = false"
-            class="absolute left-0 right-0 px-4 pb-5 bg-white border-t border-gray-100 shadow-lg lg:hidden">
-
-            <div class="flex flex-col gap-1 pt-3">
-
-                <a
-                    href="#"
-                    @click="mobileMenuOpen = false"
-                    class="px-4 py-3 font-medium rounded-lg hover:bg-green-50 hover:text-green-700">
-
-                    Home
-
-                </a>
-
-                <a
-                    href="#how-it-works"
-                    @click="mobileMenuOpen = false"
-                    class="px-4 py-3 font-medium rounded-lg hover:bg-green-50 hover:text-green-700">
-
-                    How It Works
-
-                </a>
-
-                <a
-                    href="#why"
-                    @click="mobileMenuOpen = false"
-                    class="px-4 py-3 font-medium rounded-lg hover:bg-green-50 hover:text-green-700">
-
-                    About
-
-                </a>
-
-                <a
-                    href="#c"
-                    @click="mobileMenuOpen = false"
-                    class="px-4 py-3 font-medium rounded-lg hover:bg-green-50 hover:text-green-700">
-
-                    Contact
-
-                </a>
-
+        <div x-cloak x-show="open" x-transition @click.outside="open = false" class="px-4 pb-5 bg-white border-t border-slate-100 lg:hidden">
+            <div class="flex flex-col py-3 font-semibold">
+                <a @click="open=false" href="#workflow" class="px-3 py-3 rounded-lg hover:bg-green-50">How It Works</a>
+                <a @click="open=false" href="#features" class="px-3 py-3 rounded-lg hover:bg-green-50">Smart Features</a>
+                <a @click="open=false" href="#roles" class="px-3 py-3 rounded-lg hover:bg-green-50">For Farmers & Buyers</a>
+                <a @click="open=false" href="#contact" class="px-3 py-3 rounded-lg hover:bg-green-50">Contact</a>
             </div>
-
-            <div class="grid grid-cols-2 gap-3 pt-4 mt-3 border-t border-gray-100">
-
-                <a
-                    href="/login"
-                    class="px-4 py-2.5 font-semibold text-center text-green-700 border border-green-700 rounded-lg hover:bg-green-50">
-
-                    Log In
-
-                </a>
-
-                <a
-                    href="/register"
-                    class="px-4 py-2.5 font-semibold text-center text-white bg-green-700 rounded-lg hover:bg-green-800">
-
-                    Create Account
-
-                </a>
-
+            <div class="grid grid-cols-2 gap-3">
+                <a href="{{ route('login') }}" class="px-4 py-3 font-semibold text-center text-[#16833D] border border-[#16833D] rounded-xl">Log In</a>
+                <a href="{{ route('register') }}" class="px-4 py-3 font-semibold text-center text-white bg-[#16833D] rounded-xl">Create Account</a>
             </div>
-
         </div>
-
     </nav>
 
-    <!-- HERO SECTION -->
-    {{-- Mobile Responsive: Smaller minimum height on mobile --}}
-    <section class="relative min-h-[650px] overflow-hidden sm:min-h-screen">
-
-        <img
-            src="image/products/hero-farmer.png"
-            alt="Sri Lankan Farmer"
-            class="absolute inset-0 object-cover w-full h-full">
-
-        <div class="absolute inset-0">
-
-            {{-- Mobile Responsive: Stronger full-width overlay on mobile --}}
-            <div class="w-full md:w-[55%] h-full bg-gradient-to-r from-white/95 via-white/90 md:via-white/88 to-white/40 md:to-transparent">
-            </div>
-
-        </div>
-
-        {{-- Mobile Responsive: Responsive hero padding --}}
-        <div class="relative z-10 px-4 mx-auto pt-16 sm:px-6 sm:pt-20 lg:pt-[50px] max-w-7xl">
-
-            <div class="max-w-2xl mt-8 ">
-
-                {{-- Mobile Responsive: Smaller hero heading on mobile --}}
-                <div class="text-2xl font-bold text-green-950 sm:text-4xl lg:text-5xl">
-
-                    Fresh Agricultural Products Directly from
-
-                    <span class="text-green-600">
-                        Sri Lankan Farmers
-                    </span>
-
+    {{-- Hero --}}
+    <header id="home" class="relative min-h-[680px] overflow-hidden lg:min-h-[760px]">
+        <img src="{{ asset('image/products/hero-farmer.png') }}" alt="Sri Lankan farmer carrying fresh vegetables" class="absolute inset-0 object-cover object-center w-full h-full
+          brightness-[0.88] contrast-[1.05] saturate-[1.05]">
+        {{-- Desktop: Gradient only covers the text area --}}
+        <div  class="absolute inset-0 hidden md:block
+           bg-[linear-gradient(90deg,rgba(248,250,252,0.98)_0%,rgba(248,250,252,0.95)_38%,rgba(248,250,252,0.72)_53%,rgba(15,23,42,0.06)_72%,rgba(15,23,42,0.12)_100%)]"></div>
+        {{-- Mobile: Light overlay improves text readability --}}
+        <div class="absolute inset-0 md:hidden bg-slate-50/85"></div>
+        <div class="relative flex items-center min-h-[680px] px-4 mx-auto max-w-7xl sm:px-6 lg:min-h-[760px] lg:px-8">
+            <div class="max-w-3xl py-20 sm:-translate-y-6 lg:-translate-y-12">
+                <div class="inline-flex items-center gap-2 px-4 py-2 text-sm font-bold text-[#16833D] border border-green-200 rounded-full bg-green-50/90">
+                    <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                    Sri Lanka's smart agricultural marketplace
                 </div>
 
-                {{-- Mobile Responsive: Smaller paragraph and hidden manual break on mobile --}}
-                <p class="mt-5 text-base leading-relaxed text-gray-700 sm:mt-6 sm:text-lg lg:text-xl">
+                <h1 class="mt-7 text-4xl font-extrabold leading-[1.08] tracking-tight text-slate-950 sm:text-5xl lg:text-7xl">
+                    Fresh produce.
+                    <span class="block text-[#16833D]">Fairer opportunities.</span>
+                </h1>
 
-                    Connect buyers and farmers through a smart digital marketplace
-
-                    <br class="hidden sm:block">
-
-                    with fair pricing, demand insights and direct product offers.
-
+                <p class="max-w-2xl mt-6 text-lg leading-8 text-slate-600 sm:text-xl">
+                    Connect directly with trusted farmers, negotiate wholesale offers, <br>discover nearby products and make better decisions using smart market insights.
                 </p>
 
-                {{-- Mobile Responsive: Hero buttons stack vertically on mobile --}}
-                <div class="flex flex-col gap-3 mt-8 sm:flex-row sm:gap-4 sm:mt-12 lg:mt-14">
-
-                    <a
-                        href="#"
-                        class="w-full px-6 py-3 font-semibold text-center text-white bg-green-700 sm:w-auto sm:px-8 sm:py-4 hover:bg-green-800 rounded-xl">
-
-                        Browse Products
-
+                <div class="flex flex-col gap-3 mt-9 sm:flex-row">
+                    <a href="{{ route('register') }}" class="inline-flex items-center justify-center gap-2 px-7 py-4 font-bold text-white bg-[#16833D] rounded-xl shadow-lg shadow-green-900/10 transition hover:-translate-y-0.5 hover:bg-[#106B31]">
+                        Start on AgroSmart
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/></svg>
                     </a>
-
-                    <a
-                        href="/login"
-                        class="w-full px-6 py-3 font-semibold text-center text-green-700 bg-white border border-green-700 sm:w-auto sm:px-8 sm:py-4 rounded-xl">
-
-                        Become a Farmer Seller
-
-                    </a>
-
+                    <a href="#workflow" class="inline-flex items-center justify-center px-7 py-4 font-bold text-[#16833D] bg-white border border-green-200 rounded-xl transition hover:bg-green-50">See How It Works</a>
                 </div>
 
+                <div class="flex flex-wrap gap-x-7 gap-y-3 mt-9 text-s font-semibold text-slate-600">
+                    <span class="flex items-center gap-2"><span class="text-green-600">✓</span> Direct farmer connection</span>
+                    <span class="flex items-center gap-2"><span class="text-green-600">✓</span> Smart price guidance</span>
+                    <span class="flex items-center gap-2"><span class="text-green-600">✓</span> Location-based discovery</span>
+                </div>
             </div>
-
         </div>
+    </header>
 
+    {{-- Value strip --}}
+    <section class="relative z-10 px-4 -mt-10 sm:px-6 lg:px-8">
+        <div class="grid max-w-6xl text-lg grid-cols-2 mx-auto overflow-hidden bg-white border shadow-xl border-slate-200 rounded-2xl lg:grid-cols-4 shadow-slate-900/5">
+            @foreach([
+                ['Direct Offers', 'Buyers and farmers negotiate fairly'],
+                ['Smart Pricing', 'Market-informed price recommendations'],
+                ['Nearby Products', 'Discover produce by district and city'],
+                ['Order Tracking', 'Follow every order from deal to pickup'],
+            ] as [$title, $copy])
+                <div class="p-5 border-b border-r sm:p-6 border-slate-100 lg:border-b-0 last:border-r-0">
+                    <p class="font-extrabold text-[#16833D]">{{ $title }}</p>
+                    <p class="mt-1 text-base leading-6 text-slate-500">{{ $copy }}</p>
+                </div>
+            @endforeach
+        </div>
     </section>
 
-    <!-- HOW IT WORKS -->
-    {{-- Mobile Responsive: Smaller section padding on mobile --}}
-    <section
-        class="py-14 sm:py-20 bg-[#F8F5EC] overflow-hidden"
-        id="how-it-works">
-
-        <div class="px-4 mx-auto sm:px-6 max-w-7xl">
-
-            <div class="text-center">
-
-                {{-- Mobile Responsive: Smaller section heading on mobile --}}
-                <h2 class="text-3xl font-bold text-center text-green-700 sm:text-4xl">
-                    How It Works
-                </h2>
-
-                <div class="flex items-center justify-center gap-3 mt-3">
-                    <div class="w-12 sm:w-14 h-[2px] bg-green-700"></div>
-                    <span class="text-lg text-green-700">🌿</span>
-                    <div class="w-12 sm:w-14 h-[2px] bg-green-700"></div>
-                </div>
-
-            </div>
-
-            {{-- Mobile Responsive: Cards stack on mobile and form three columns on desktop --}}
-            <div class="grid grid-cols-1 gap-5 mt-10 lg:grid-cols-3 lg:mt-14">
-
-                <!-- CARD 1 -->
-                <div class="bg-[#FFF8EE] border border-[#EFE2CC] rounded-3xl px-4 py-5 sm:px-6 sm:py-3 shadow-sm flex flex-col sm:flex-row items-center min-h-[170px] hover:shadow-lg duration-300">
-
-                    <div class="shrink-0">
-                        {{-- Mobile Responsive: Smaller card image on mobile --}}
-                        <img
-                            src="/image/products/farmer.png"
-                            alt="Farmer"
-                            class="object-contain w-32 h-32 sm:w-40 sm:h-40">
-                    </div>
-
-                    <div class="flex-1 text-center sm:text-left">
-
-                        <div class="flex items-center justify-center w-10 h-10 mx-auto mb-3 text-base font-bold text-white bg-green-700 rounded-full sm:w-12 sm:h-12 sm:mx-0 sm:mb-4 sm:text-lg">
-                            01
-                        </div>
-
-                        <h3 class="text-lg font-bold leading-snug text-gray-900 sm:text-xl">
-                            Farmers Publish Products
-                        </h3>
-
-                        <p class="mt-2 text-sm leading-relaxed text-gray-600 sm:mt-3">
-                            Farmers add their products, prices and available quantities.
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <!-- CARD 2 -->
-                <div class="bg-[#FFF8EE] border border-[#EFE2CC] rounded-3xl px-4 py-5 sm:px-6 sm:py-3 shadow-sm flex flex-col sm:flex-row items-center min-h-[170px] hover:shadow-lg duration-300">
-
-                    <div class="shrink-0">
-                        <img
-                            src="/image/products/buyer.png"
-                            alt="Buyer"
-                            class="object-contain w-32 h-32 sm:w-40 sm:h-40">
-                    </div>
-
-                    <div class="flex-1 text-center sm:text-left">
-
-                        <div class="flex items-center justify-center w-10 h-10 mx-auto mb-3 text-base font-bold text-white bg-green-700 rounded-full sm:w-12 sm:h-12 sm:mx-0 sm:mb-4 sm:text-lg">
-                            02
-                        </div>
-
-                        <h3 class="text-lg font-bold leading-snug text-gray-900 sm:text-xl">
-                            Buyers Submit Offers
-                        </h3>
-
-                        <p class="mt-2 text-sm leading-relaxed text-gray-600 sm:mt-3">
-                            Buyers browse products and submit their best offers.
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <!-- CARD 3 -->
-                <div class="bg-[#FFF8EE] border border-[#EFE2CC] rounded-3xl px-4 py-5 sm:px-6 sm:py-3 shadow-sm flex flex-col sm:flex-row items-center min-h-[170px] hover:shadow-lg duration-300">
-
-                    <div class="shrink-0">
-                        <img
-                            src="/image/products/deal.png"
-                            alt="Marketplace Deal"
-                            class="object-contain w-32 h-32 sm:w-40 sm:h-40">
-                    </div>
-
-                    <div class="flex-1 text-center sm:text-left">
-
-                        <div class="flex items-center justify-center w-10 h-10 mx-auto mb-3 text-base font-bold text-white bg-green-700 rounded-full sm:w-12 sm:h-12 sm:mx-0 sm:mb-4 sm:text-lg">
-                            03
-                        </div>
-
-                        <h3 class="text-lg font-bold leading-snug text-gray-900 sm:text-xl">
-                            Smart Marketplace
-                        </h3>
-
-                        <p class="mt-2 text-sm leading-relaxed text-gray-600 sm:mt-3">
-                            Farmers review offers and close deals. Everyone wins!
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-    <!-- CATEGORIES -->
-    {{-- Mobile Responsive: Smaller section padding on mobile --}}
-    <section class="pb-16 sm:pb-24">
-
-        <div class="px-4 mx-auto sm:px-6 max-w-7xl">
-
-            <h2 class="text-3xl font-bold text-center text-green-700 sm:text-4xl">
-                Explore Categories
-            </h2>
-
-            <div class="flex items-center justify-center gap-3 mt-3">
-                <div class="w-12 sm:w-14 h-[2px] bg-green-700"></div>
-                <span class="text-lg text-green-700">🌿</span>
-                <div class="w-12 sm:w-14 h-[2px] bg-green-700"></div>
-            </div>
-
-            {{-- Mobile Responsive: One, two and five column responsive category grid --}}
-            <div class="grid grid-cols-1 gap-5 mt-10 sm:grid-cols-2 sm:mt-14 lg:grid-cols-5 lg:mt-16 lg:gap-6">
-
-                <div class="overflow-hidden bg-white shadow-sm rounded-2xl">
-                    <img src="image/products/v.jpeg" alt="Vegetables" class="object-cover w-full h-48">
-                    <div class="p-5">
-                        <h3 class="text-xl font-bold">Vegetables</h3>
-                    </div>
-                </div>
-
-                <div class="overflow-hidden bg-white shadow-sm rounded-2xl">
-                    <img src="image/products/f.png" alt="Fruits" class="object-cover w-full h-48">
-                    <div class="p-5">
-                        <h3 class="text-xl font-bold">Fruits</h3>
-                    </div>
-                </div>
-
-                <div class="overflow-hidden bg-white shadow-sm rounded-2xl">
-                    <img src="image/products/r.jpeg" alt="Rice and Grains" class="object-cover w-full h-48">
-                    <div class="p-5">
-                        <h3 class="text-xl font-bold">Rice & Grains</h3>
-                    </div>
-                </div>
-
-                <div class="overflow-hidden bg-white shadow-sm rounded-2xl">
-                    <img src="image/products/s.png" alt="Spices" class="object-cover w-full h-48">
-                    <div class="p-5">
-                        <h3 class="text-xl font-bold">Spices</h3>
-                    </div>
-                </div>
-
-                <div class="overflow-hidden bg-white shadow-sm rounded-2xl sm:col-span-2 lg:col-span-1">
-                    <img src="image/products/l.jpeg" alt="Leafy Vegetables" class="object-cover w-full h-48">
-                    <div class="p-5">
-                        <h3 class="text-xl font-bold">Leafy Vegetables</h3>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-    <!-- WHY AGROSMART -->
-    <section class="bg-[#F8F5EC]" id="why">
-
-        <div class="px-4 mx-auto sm:px-6 max-w-7xl">
-
-            <div class="text-center">
-
-                <h2 class="text-3xl font-bold text-center text-green-700 sm:text-4xl">
-                    Why AgroSmart?
-                </h2>
-
-                <div class="flex items-center justify-center gap-2 mt-2">
-                    <div class="w-10 h-[2px] bg-green-700"></div>
-                    <span class="text-green-700">🌿</span>
-                    <div class="w-10 h-[2px] bg-green-700"></div>
-                </div>
-
-            </div>
-
-            {{-- Mobile Responsive: Features stack on mobile and form five columns on desktop --}}
-            <div class="grid grid-cols-1 mt-10 mb-10 bg-[#FFF8EE] border border-[#EFE2CC] rounded-2xl shadow-sm sm:grid-cols-2 xl:grid-cols-5">
-
-                <div class="flex items-start gap-3 p-5 sm:p-6 border-b sm:border-r xl:border-b-0 border-[#EFE2CC]">
-                    <svg class="w-8 h-8 mt-1 text-green-700 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.25">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5V4H2v16h5m10 0v-4a3 3 0 00-6 0v4m6 0H7"/>
-                    </svg>
-                    <div>
-                        <h3 class="text-base font-bold text-gray-900">Direct Connection</h3>
-                        <p class="mt-1 text-sm leading-relaxed text-gray-600">No middlemen, connect directly with farmers.</p>
-                    </div>
-                </div>
-
-                <div class="flex items-start gap-3 p-5 sm:p-6 border-b xl:border-b-0 xl:border-r border-[#EFE2CC]">
-                    <svg class="w-8 h-8 mt-1 text-green-700 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.25">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5a2 2 0 011.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z"/>
-                    </svg>
-                    <div>
-                        <h3 class="text-base font-bold text-gray-900">Better Prices</h3>
-                        <p class="mt-1 text-sm leading-relaxed text-gray-600">Fair prices for both farmers and buyers.</p>
-                    </div>
-                </div>
-
-                <div class="flex items-start gap-3 p-5 sm:p-6 border-b sm:border-r xl:border-b-0 border-[#EFE2CC]">
-                    <svg class="w-8 h-8 mt-1 text-green-700 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.25">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                    </svg>
-                    <div>
-                        <h3 class="text-base font-bold text-gray-900">Easy Search</h3>
-                        <p class="mt-1 text-sm leading-relaxed text-gray-600">Find the right products quickly and easily.</p>
-                    </div>
-                </div>
-
-                <div class="flex items-start gap-3 p-5 sm:p-6 border-b xl:border-b-0 xl:border-r border-[#EFE2CC]">
-                    <svg class="w-8 h-8 mt-1 text-green-700 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.25">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 3v18h18M7 15l4-4 4 4 6-6"/>
-                    </svg>
-                    <div>
-                        <h3 class="text-base font-bold text-gray-900">Demand Insights</h3>
-                        <p class="mt-1 text-sm leading-relaxed text-gray-600">Smart data to help you make better decisions.</p>
-                    </div>
-                </div>
-
-                <div class="flex items-start gap-3 p-5 sm:p-6 sm:col-span-2 xl:col-span-1">
-                    <svg class="w-8 h-8 mt-1 text-green-700 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.25">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3l7 4v5c0 5-3.5 9-7 10-3.5-1-7-5-7-10V7l7-4z"/>
-                    </svg>
-                    <div>
-                        <h3 class="text-base font-bold text-gray-900">Secure & Trusted</h3>
-                        <p class="mt-1 text-sm leading-relaxed text-gray-600">Safe transactions and trusted marketplace.</p>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-    <!-- FARMER CTA SECTION -->
-    <section class="bg-[#E8F0DD]">
-
+    {{-- Workflow --}}
+    <section id="workflow" class="px-4 py-24 sm:px-6 lg:px-8 lg:py-32">
         <div class="mx-auto max-w-7xl">
-
-            {{-- Mobile Responsive: CTA sections stack on mobile --}}
-            <div class="grid items-center grid-cols-1 py-8 md:grid-cols-3 md:py-0">
-
-                <div class="bg-[#E8F0DD] flex items-center justify-center">
-                    <img
-                        src="/image/products/pp.png"
-                        alt="Farmer"
-                        class="w-full h-[160px] sm:h-[180px] object-contain">
-                </div>
-
-                <div class="px-5 text-center sm:px-8">
-
-                    <h2 class="text-3xl font-bold text-gray-900 sm:text-4xl">
-                        Are you a Farmer?
-                    </h2>
-
-                    <p class="mt-4 text-base leading-relaxed text-gray-700 sm:text-lg">
-                        Join AgroSmart Marketplace and reach thousands
-                        of buyers. Grow your business with us.
-                    </p>
-
-                </div>
-
-                {{-- Mobile Responsive: Adds spacing above CTA button on mobile --}}
-                <div class="px-4 mt-6 text-center md:px-0 md:mt-0">
-
-                    <a
-                        href="/register"
-                        class="inline-flex items-center justify-center w-full gap-3 px-6 py-3 text-base font-semibold text-white duration-300 bg-green-700 shadow-md sm:w-auto sm:px-8 sm:py-4 sm:text-lg hover:bg-green-800 rounded-xl">
-
-                        <svg
-                            class="w-5 h-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor">
-
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M5.121 17.804A13.937 13.937 0 0112 16
-                                c2.5 0 4.847.655 6.879 1.804M15 11
-                                a3 3 0 11-6 0 3 3 0 016 0z"/>
-                        </svg>
-
-                        Register as a Farmer
-
-                    </a>
-
-                    <p class="mt-4 text-gray-700">
-                        It’s free and easy!
-                    </p>
-
-                </div>
-
+            <div class="max-w-2xl mx-auto text-center">
+                <p class="text-sm font-extrabold tracking-[0.18em] text-[#16833D] uppercase">A complete digital journey</p>
+                <h2 class="mt-3 text-3xl font-extrabold tracking-tight sm:text-5xl">From farm listing to completed order</h2>
+                <p class="mt-5 text-lg leading-8 text-slate-600">AgroSmart brings product discovery, price negotiation, fulfilment and feedback into one simple workflow.</p>
             </div>
 
-        </div>
+            <div class="grid gap-5 mt-14 md:grid-cols-2 xl:grid-cols-5">
+                @php
+                    $steps = [
+                        ['01', 'Publish', 'Farmers list fresh products, quantity and minimum price.'],
+                        ['02', 'Discover', 'Buyers search and filter products by location.'],
+                        ['03', 'Negotiate', 'Buyers submit offers and farmers accept, reject or counter.'],
+                        ['04', 'Fulfil', 'Orders move through confirmation, pickup and completion.'],
+                        ['05', 'Review', 'Buyers review completed orders and build farmer trust.'],
+                    ];
+                @endphp
 
+                @foreach($steps as [$number, $title, $copy])
+                    <article class="relative p-6 bg-white border border-slate-200 rounded-2xl hover:border-green-300 hover:shadow-lg transition">
+                        <span class="grid w-12 h-12 text-sm font-extrabold text-white bg-[#16833D] rounded-xl place-items-center">{{ $number }}</span>
+                        <h3 class="mt-6 text-xl font-extrabold">{{ $title }}</h3>
+                        <p class="mt-3 text-base leading-6 text-slate-600">{{ $copy }}</p>
+                    </article>
+                @endforeach
+            </div>
+        </div>
     </section>
 
-    <!-- FOOTER -->
-    {{-- Mobile Responsive: Smaller footer padding on mobile --}}
-    <footer class="bg-gradient-to-r from-[#014d1f] to-[#016b2d] text-white pt-10 sm:pt-14 pb-6">
-
-        <div class="px-4 mx-auto sm:px-6 max-w-7xl">
-
-            {{-- Mobile Responsive: Responsive footer columns --}}
-            <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-5">
-
-                <div class="sm:col-span-2 lg:col-span-1">
-
-                    <div class="flex items-center gap-3">
-
-                        <img
-                            src="/image/products/v.png"
-                            alt="AgroSmart Logo"
-                            class="w-14">
-
-                        <div>
-                            <h2 class="text-2xl font-bold sm:text-3xl">
-                                AgroSmart
-                            </h2>
-
-                            <p class="text-xs sm:text-sm tracking-[4px] text-gray-200">
-                                MARKETPLACE
-                            </p>
-                        </div>
-
-                    </div>
-
-                    <p class="mt-6 leading-relaxed text-gray-200">
-                        Empowering Sri Lankan farmers and connecting them
-                        with buyers for a better tomorrow.
-                    </p>
-
-                    <div class="flex gap-4 mt-6">
-
-                        <a href="#" class="flex items-center justify-center duration-300 border rounded-full w-11 h-11 border-white/40 hover:bg-white hover:text-green-700">
-                            <span class="font-bold">f</span>
-                        </a>
-
-                        <a href="#" class="flex items-center justify-center duration-300 border rounded-full w-11 h-11 border-white/40 hover:bg-white hover:text-green-700">
-                            <span class="font-bold">◎</span>
-                        </a>
-
-                        <a href="#" class="flex items-center justify-center duration-300 border rounded-full w-11 h-11 border-white/40 hover:bg-white hover:text-green-700">
-                            <span class="font-bold">◉</span>
-                        </a>
-
-                    </div>
-
-                </div>
-
+    {{-- Smart features --}}
+    <section id="features" class="px-4 py-24 bg-[#0B2417] text-white sm:px-6 lg:px-8 lg:py-28">
+        <div class="mx-auto max-w-7xl">
+            <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
                 <div>
-                    <h3 class="mb-5 text-lg font-bold sm:text-xl">QUICK LINKS</h3>
-                    <ul class="space-y-3 text-gray-200">
-                        <li><a href="#how-it-works" class="hover:text-white">How It Works</a></li>
-                        <li><a href="#why" class="hover:text-white">About Us</a></li>
-                        <li><a href="#c" class="hover:text-white">Contact Us</a></li>
-                        <li><a href="#" class="hover:text-white">FAQs</a></li>
-                    </ul>
+                    <p class="text-sm font-extrabold tracking-[0.18em] text-green-300 uppercase">Built for smarter trade</p>
+                    <h2 class="mt-3 text-3xl font-extrabold tracking-tight sm:text-5xl">More than a product listing website</h2>
                 </div>
-
-                <div>
-                    <h3 class="mb-5 text-lg font-bold sm:text-xl">FOR FARMERS</h3>
-                    <ul class="space-y-3 text-gray-200">
-                        <li>Farmer Registration</li>
-                        <li>Add Products</li>
-                        <li>My Products</li>
-                        <li>My Offers</li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h3 class="mb-5 text-lg font-bold sm:text-xl">FOR BUYERS</h3>
-                    <ul class="space-y-3 text-gray-200">
-                        <li>Buyer Registration</li>
-                        <li>Browse Products</li>
-                        <li>My Offers</li>
-                        <li>Add Review & Feedback</li>
-                    </ul>
-                </div>
-
-                <div id="c">
-
-                    <h3 class="mb-5 text-lg font-bold sm:text-xl">
-                        CONTACT US
-                    </h3>
-
-                    <div class="space-y-5 text-gray-200">
-
-                        <div class="flex gap-3">
-                            <span>📞</span>
-                            <p>+94 75 202 5500</p>
-                        </div>
-
-                        <div class="flex gap-3">
-                            <span>✉️</span>
-                            <p class="break-all">agrosmart@gmail.com</p>
-                        </div>
-
-                        <div class="flex gap-3">
-                            <span>📍</span>
-                            <p>
-                                No. 123, Kandy Road,
-                                Mawathagama, Sri Lanka
-                            </p>
-                        </div>
-
-                    </div>
-
-                </div>
-
+                <p class="text-lg leading-8 text-green-50/70">Every feature supports a real decision in the agricultural marketplace—from choosing the right selling price to locating nearby supply and tracking demand.</p>
             </div>
 
-            {{-- Mobile Responsive: Footer bottom content stacks on mobile --}}
-            <div class="flex flex-col items-center justify-between gap-4 pt-6 mt-10 text-sm text-center text-gray-200 border-t md:flex-row md:text-left border-white/20">
+            @php
+                $features = [
+                    ['Smart Price Recommendations', 'Uses completed-order history, marketplace prices and demand levels to suggest a practical price range.'],
+                    ['Demand Analysis', 'Tracks searches, views, offers and completed orders to identify high- and low-demand products.'],
+                    ['Location-Based Matching', 'Connects buyers with products available in their preferred district and city.'],
+                    ['Offer Negotiation', 'Supports direct acceptance, rejection and counter-offers with transparent pricing.'],
+                    ['Order Status Tracking', 'Tracks pending, confirmed, ready-for-pickup, completed and cancelled orders.'],
+                    ['Trusted Reviews', 'Allows verified buyers to review completed orders and strengthen farmer credibility.'],
+                ];
+            @endphp
 
-                <p>
-                    © 2026 AgroSmart Marketplace. All rights reserved.
-                </p>
-
-                <div class="flex flex-wrap justify-center gap-4 sm:gap-6">
-                    <a href="#" class="hover:text-white">Privacy Policy</a>
-                    <a href="#" class="hover:text-white">Terms & Conditions</a>
-                </div>
-
+            <div class="grid gap-5 mt-14 md:grid-cols-2 xl:grid-cols-3">
+                @foreach($features as $index => [$title, $copy])
+                    <article class="p-7 border bg-white/[0.06] border-white/10 rounded-2xl transition hover:bg-white/[0.1]">
+                        <div class="flex items-center justify-between">
+                            <span class="grid w-11 h-11 font-extrabold text-green-950 bg-green-300 rounded-xl place-items-center">{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</span>
+                            <!-- <svg class="w-6 h-6 text-green-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/></svg> -->
+                        </div>
+                        <h3 class="mt-7 text-xl font-extrabold">{{ $title }}</h3>
+                        <p class="mt-3 text-base leading-7 text-green-50/65">{{ $copy }}</p>
+                    </article>
+                @endforeach
             </div>
-
         </div>
+    </section>
 
+    {{-- Role pathways --}}
+    <section id="roles" class="px-4 py-24 sm:px-6 lg:px-8 lg:py-32">
+        <div class="mx-auto max-w-7xl">
+            <div class="max-w-2xl mx-auto text-center">
+                <p class="text-sm font-extrabold tracking-[0.18em] text-[#16833D] uppercase">One marketplace, two opportunities</p>
+                <h2 class="mt-3 text-3xl font-extrabold sm:text-5xl">Choose how you use AgroSmart</h2>
+            </div>
+
+            <div class="grid gap-6 mt-14 lg:grid-cols-2">
+                <article class="relative p-8 overflow-hidden text-white bg-[#16833D] rounded-3xl sm:p-10">
+                    <div class="relative z-10 max-w-lg">
+                        <span class="inline-flex px-3 py-1 text-base font-bold text-green-900 bg-green-200 rounded-full">For Farmers</span>
+                        <h3 class="mt-6 text-3xl font-extrabold">Sell with better information and direct buyer access.</h3>
+                        <ul class="mt-7 space-y-3 text-lg text-green-50/90">
+                            <li>✓ Publish and manage wholesale products</li>
+                            <li>✓ Receive smart price recommendations</li>
+                            <li>✓ Negotiate and manage buyer offers</li>
+                            <li>✓ View demand insights and reviews</li>
+                        </ul>
+                        <a href="{{ route('register') }}" class="inline-flex px-6 py-3 mt-8 font-bold text-[#16833D] bg-white rounded-xl">Register as a Farmer</a>
+                    </div>
+                    <div class="absolute w-56 h-56 rounded-full -right-16 -bottom-16 bg-white/10"></div>
+                </article>
+
+                <article class="relative p-8 overflow-hidden bg-[#EEF6EA] border border-green-100 rounded-3xl sm:p-10">
+                    <div class="relative z-10 max-w-lg">
+                        <span class="inline-flex px-3 py-1 text-base font-bold text-[#16833D] bg-white rounded-full">For Buyers</span>
+                        <h3 class="mt-6 text-3xl font-extrabold">Find fresh wholesale products and negotiate confidently.</h3>
+                        <ul class="mt-7 space-y-3 text-lg  text-slate-700">
+                            <li>✓ Search products and nearby farmers</li>
+                            <li>✓ Submit and track product offers</li>
+                            <li>✓ Accept or reject farmer counter-offers</li>
+                            <li>✓ Track orders and leave verified reviews</li>
+                        </ul>
+                        <a href="{{ route('register') }}" class="inline-flex px-6 py-3 mt-8 font-bold text-white bg-[#16833D] rounded-xl">Register as a Buyer</a>
+                    </div>
+                    <div class="absolute w-56 h-56 bg-green-200 rounded-full -right-16 -bottom-16 opacity-50"></div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    {{-- Final CTA --}}
+    <section class="px-4 pb-24 sm:px-6 lg:px-8">
+        <div class="max-w-7xl px-6 py-12 mx-auto text-center text-white bg-gradient-to-r from-[#0B3D22] to-[#16833D] rounded-3xl sm:px-10 sm:py-16">
+            <p class="text-sm font-bold tracking-[0.18em] text-green-200 uppercase">Grow through better connections</p>
+            <h2 class="max-w-3xl mx-auto mt-4 text-3xl font-extrabold sm:text-5xl">Ready to join Sri Lanka's smarter agricultural marketplace?</h2>
+            <p class="max-w-2xl mx-auto mt-5 text-lg leading-8 text-green-50/75">Create your account and begin selling, discovering and negotiating fresh agricultural products.</p>
+            <div class="flex flex-col justify-center gap-3 mt-8 sm:flex-row">
+                <a href="{{ route('register') }}" class="px-7 py-4 font-bold text-[#16833D] bg-white rounded-xl">Create Account</a>
+                <a href="{{ route('login') }}" class="px-7 py-4 font-bold text-white border rounded-xl border-white/40 hover:bg-white/10">Log In</a>
+            </div>
+        </div>
+    </section>
+
+    {{-- Footer --}}
+    <footer id="contact" class="px-4 pt-16 pb-8 text-white bg-[#071A10] sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-7xl">
+            <div class="grid gap-10 pb-12 border-b md:grid-cols-2 lg:grid-cols-4 border-white/10">
+                <div>
+                    <div class="flex items-center gap-3">
+                        <img src="{{ asset('image/logo.png') }}" alt="AgroSmart" class="object-contain w-12 h-12 brightness-0 invert">
+                        <div><p class="text-2xl font-extrabold">AgroSmart</p><p class="text-[10px] tracking-[0.24em] text-green-200">MARKETPLACE</p></div>
+                    </div>
+                    <p class="mt-5 leading-7 text-white/60">Connecting Sri Lankan farmers and buyers through transparent, data-informed agricultural trade.</p>
+                </div>
+
+                <div>
+                    <h3 class="font-extrabold">Platform</h3>
+                    <div class="flex flex-col mt-5 space-y-3 text-white/60">
+                        <a href="#workflow" class="hover:text-white">How It Works</a>
+                        <a href="#features" class="hover:text-white">Smart Features</a>
+                        <a href="#roles" class="hover:text-white">For Farmers & Buyers</a>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="font-extrabold">Account</h3>
+                    <div class="flex flex-col mt-5 space-y-3 text-white/60">
+                        <a href="{{ route('register') }}" class="hover:text-white">Create Account</a>
+                        <a href="{{ route('login') }}" class="hover:text-white">Log In</a>
+                        <a href="{{ route('register') }}" class="hover:text-white">Join as a Farmer</a>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="font-extrabold">Contact</h3>
+                    <div class="mt-5 space-y-3 text-white/60">
+                        <p>+94 75 202 5500</p>
+                        <p>agrosmart@gmail.com</p>
+                        <p>Mawathagama, Sri Lanka</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col justify-between gap-4 pt-7 text-sm text-white/45 sm:flex-row">
+                <p>© {{ date('Y') }} AgroSmart Marketplace. All rights reserved.</p>
+                <p>Built for smarter agricultural connections.</p>
+            </div>
+        </div>
     </footer>
 
 </body>
-
 </html>
+
