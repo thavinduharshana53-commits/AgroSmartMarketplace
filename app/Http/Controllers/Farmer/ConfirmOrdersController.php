@@ -28,7 +28,8 @@ class ConfirmOrdersController extends Controller
         return view('farmer.confirmOrders', compact('orders'));
     }
 
-    public function updateStatus(Request $request, Order $order, DemandAnalysisService $demandAnalysisService) {
+    public function updateStatus(Request $request, Order $order, DemandAnalysisService $demandAnalysisService)
+    {
         abort_unless(
             (int) $order->farmer_id === (int) Auth::id(),
             403,
@@ -68,45 +69,62 @@ class ConfirmOrdersController extends Controller
             'cancelled' => [],
         ];
 
-        if (! in_array($newStatus,$allowedTransitions[$currentStatus] ?? [],true)) {
-            return back()->with('error', 'This order status change is not allowed.');
+        if (! in_array(
+            $newStatus,
+            $allowedTransitions[$currentStatus] ?? [],
+            true
+        )) {
+            return back()->with(
+                'error',
+                'This order status change is not allowed.'
+            );
         }
 
         DB::transaction(function () use (
             $order,
-            $newStatus
+            $newStatus,
+            $demandAnalysisService
         ) {
             // Update the order status.
             $order->update([
                 'order_status' => $newStatus,
             ]);
 
-            // Completed order means the product is fully sold.
+            /*
+            * Completed order:
+            * mark the product as sold and update demand analysis.
+            */
             if ($newStatus === 'completed') {
-                Product::where(
-                    'product_id',
+                $product = Product::findOrFail(
                     $order->product_id
-                )->update([
+                );
+
+                $product->update([
                     'availability_status' => 'Sold Out',
                 ]);
 
-                // Record the completed order for demand analysis.
-                Demand::firstOrCreate([
+                $demandActivity = Demand::firstOrCreate(
+                    [
                         'buyer_id' => $order->buyer_id,
                         'product_id' => $order->product_id,
                         'activity_type' => 'order',
                     ],
-
                     [
                         'activity_date' => now(),
-                ]);
+                    ]
+                );
+
+                if ($demandActivity->wasRecentlyCreated) {
+                    $demandAnalysisService->analyzeProduct(
+                        $product
+                    );
+                }
             }
 
-            if ($demandActivity->wasRecentlyCreated) {
-                $demandAnalysisService->analyzeProduct($order->product);
-            }
-
-            // Cancelled order makes the product available again.
+            /*
+            * Cancelled order:
+            * make the product available and reject its accepted offer.
+            */
             if ($newStatus === 'cancelled') {
                 Product::where(
                     'product_id',
@@ -115,7 +133,6 @@ class ConfirmOrdersController extends Controller
                     'availability_status' => 'Available',
                 ]);
 
-                // Reset the previously accepted offer.
                 Offer::where(
                     'offer_id',
                     $order->offer_id
@@ -128,19 +145,15 @@ class ConfirmOrdersController extends Controller
         });
 
         $statusLabel = match ($newStatus) {
-            'confirmed' =>
-                'confirmed',
+            'confirmed' => 'confirmed',
 
-            'ready_for_pickup' =>
-                'marked as ready for pickup',
+            'ready_for_pickup' => 'marked as ready for pickup',
 
-            'completed' =>
-                'completed',
+            'completed' => 'completed',
 
-            'cancelled' =>
-                'cancelled',
+            'cancelled' => 'cancelled',
         };
 
-        return back()->with('success', "Order {$statusLabel} successfully.");
+        return back()->with('success',"Order {$statusLabel} successfully.");
     }
 }

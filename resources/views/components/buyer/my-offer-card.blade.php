@@ -179,7 +179,7 @@
                 </span>
 
                 {{-- Mobile Responsive: Status message can wrap --}}
-                <p class="mt-3 text-sm text-gray-500 sm:text-base">
+                <p class="mt-3 text-sm text-gray-500 mb-3 sm:text-base">
                     Waiting for farmer response
                 </p>
 

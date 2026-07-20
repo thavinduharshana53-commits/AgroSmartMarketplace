@@ -277,7 +277,7 @@
             <div class="flex items-center gap-3 sm:gap-5">
 
                 {{-- Notification --}}
-                <button
+                <!-- <button
                     type="button"
                     class="relative flex items-center justify-center w-11 h-11
                            text-slate-600 border border-slate-200 rounded-xl
@@ -301,7 +301,7 @@
                             d="M10 21h4"/>
                     </svg>
 
-                </button>
+                </button> -->
 
                 {{-- Profile Dropdown --}}
                 <div

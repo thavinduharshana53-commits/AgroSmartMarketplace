@@ -95,9 +95,7 @@ class OfferController extends Controller
             'activity_date' => now(),
         ]);
 
-        if ($demandActivity->wasRecentlyCreated) {
-            $demandAnalysisService->analyzeProduct($product);
-        }
+        $demandAnalysisService->analyzeProduct($product);
 
         return redirect()
             ->back()
