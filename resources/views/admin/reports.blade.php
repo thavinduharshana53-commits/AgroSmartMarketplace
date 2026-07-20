@@ -17,12 +17,44 @@
             </p>
         </div>
 
-        <div class="inline-flex items-center self-start gap-2 px-4 py-2 text-sm font-semibold border text-emerald-700 border-emerald-200 bg-emerald-50 rounded-xl">
+        <div class="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
 
-            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <div class="inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold border text-emerald-700 border-emerald-200 bg-emerald-50 rounded-xl">
 
-            {{ number_format($totalOrders) }}
-            orders found
+
+                {{ number_format($totalOrders) }}
+                orders found
+
+            </div>
+
+            <a
+                href="{{ route('admin.reports.download',
+                    request()->only([
+                        'search',
+                        'status',
+                        'date_from',
+                        'date_to',
+                    ])
+                ) }}"
+                class="inline-flex items-center justify-center gap-2 px-5 py-3 font-semibold text-white transition bg-emerald-600 rounded-xl hover:bg-emerald-700">
+
+                <svg
+                    class="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    viewBox="0 0 24 24">
+
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/>
+
+                </svg>
+
+                Download PDF
+
+            </a>
 
         </div>
 
@@ -37,7 +69,7 @@
             <div class="flex items-center justify-between">
 
                 <div>
-                    <p class="text-sm font-semibold text-slate-500">
+                    <p class="text-base font-semibold text-slate-500">
                         Total Orders
                     </p>
 
@@ -74,7 +106,7 @@
             <div class="flex items-center justify-between">
 
                 <div>
-                    <p class="text-sm font-semibold text-slate-500">
+                    <p class="text-base font-semibold text-slate-500">
                         Completed
                     </p>
 
@@ -113,7 +145,7 @@
             <div class="flex items-center justify-between">
 
                 <div>
-                    <p class="text-sm font-semibold text-slate-500">
+                    <p class="text-base font-semibold text-slate-500">
                         Cancelled
                     </p>
 
@@ -152,7 +184,7 @@
             <div class="flex items-center justify-between gap-3">
 
                 <div class="min-w-0">
-                    <p class="text-sm font-semibold text-emerald-700">
+                    <p class="text-base font-semibold text-emerald-700">
                         Total Sales
                     </p>
 
@@ -179,7 +211,7 @@
             <div class="flex items-center justify-between gap-3">
 
                 <div class="min-w-0">
-                    <p class="text-sm font-semibold text-slate-500">
+                    <p class="text-base font-semibold text-slate-500">
                         Average Sale
                     </p>
 
@@ -405,14 +437,14 @@
 
                 <thead class="bg-slate-50">
 
-                    <tr class="text-sm font-semibold text-slate-600">
+                    <tr class="text-s font-semibold text-slate-600">
 
                         <th class="px-5 py-4">Order</th>
                         <th class="px-5 py-4">Product</th>
                         <th class="px-5 py-4">Buyer</th>
                         <th class="px-5 py-4">Farmer</th>
-                        <th class="px-5 py-4">Quantity</th>
-                        <th class="px-5 py-4">Accepted Price</th>
+                        <th class="px-5 py-4">Total Quantity</th>
+                        <th class="px-5 py-4">Accepted Price(1kg)</th>
                         <th class="px-5 py-4">Total Amount</th>
                         <th class="px-5 py-4">Status</th>
                         <th class="px-5 py-4">Date</th>
@@ -457,7 +489,7 @@
                         <tr class="transition hover:bg-slate-50/70">
 
                             <td class="px-5 py-5">
-                                <span class="font-bold text-slate-900">
+                                <span class="font-bold  text-slate-900">
                                     #{{ str_pad($order->order_id, 4, '0', STR_PAD_LEFT) }}
                                 </span>
                             </td>
@@ -498,15 +530,15 @@
 
                             </td>
 
-                            <td class="px-5 py-5 font-medium whitespace-nowrap text-slate-700">
+                            <td class="px-5 py-5 font-medium text-lg whitespace-nowrap text-slate-700">
                                 {{ number_format((float) $order->quantity, 2) }} kg
                             </td>
 
-                            <td class="px-5 py-5 font-semibold whitespace-nowrap text-emerald-700">
+                            <td class="px-5 py-5 font-semibold  text-lg whitespace-nowrap text-emerald-700">
                                 Rs. {{ number_format((float) $order->accepted_price, 2) }}
                             </td>
 
-                            <td class="px-5 py-5 font-bold whitespace-nowrap text-slate-900">
+                            <td class="px-5 py-5 font-bold  text-lg whitespace-nowrap text-slate-900">
                                 Rs. {{ number_format((float) $order->total_amount, 2) }}
                             </td>
 

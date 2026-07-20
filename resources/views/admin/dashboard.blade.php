@@ -205,7 +205,7 @@
             </div>
 
             <a
-                href="#"
+                href="{{ route('admin.reports') }}"
                 class="inline-flex items-center gap-2 mt-5
                        text-base font-bold text-violet-600
                        hover:text-violet-800">

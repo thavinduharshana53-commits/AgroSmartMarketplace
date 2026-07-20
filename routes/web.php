@@ -153,4 +153,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::get('/reports', [ReportsController::class, 'index'] )
             ->name('reports');
 
+        Route::get('/reports/download',[ReportsController::class, 'downloadPdf'])
+            ->name('reports.download');
+
     });

@@ -309,7 +309,7 @@
                             </td>
 
                             {{-- Action --}}
-                            <td class="px-7 py-5">
+                            <td class="px-8  py-5">
 
                                 <span class="inline-flex px-3 py-1.5 text-sm font-semibold rounded-full {{ $actionClasses }}">
                                     {{ $activity->action }}
